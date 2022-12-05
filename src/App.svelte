@@ -2,7 +2,7 @@
   import Form from "./components/Form.svelte";
   import Snippet from "./components/Snippet.svelte";
 
-  import { errors } from "./stores.js";
+  import { error } from "./stores.js";
 </script>
 
 <main class="generator">
@@ -10,9 +10,7 @@
 
   <Form />
 
-  {#each $errors as error}
-    <p class="generator__error">{error}</p>
-  {/each}
+  <p class="generator__error">{$error}</p>
 
   <Snippet />
 </main>

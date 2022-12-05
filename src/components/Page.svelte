@@ -1,11 +1,10 @@
 <script lang="ts">
   import type { BlockData, PageData } from "../types";
-  import { pagesData } from "../stores.js";
-  import { defaultBlock } from "../models.js";
-
-  import Block from "./Block.svelte";
+  import { blocksData, pagesData, error } from "../stores.js";
 
   export let page: PageData;
+
+  let selectedBlock;
 
   const deletePage = () => {
     pagesData.update((data) => {
@@ -20,10 +19,9 @@
   };
 
   const addBlock = () => {
-    const newBlock: BlockData = {
-      index: page.blocks.length,
-      ...defaultBlock
-    };
+    const newBlock: BlockData = $blocksData.find(
+      (el) => el.id === selectedBlock
+    );
 
     pagesData.update((data) => {
       data.map((el) => {
@@ -35,9 +33,7 @@
     });
   };
 
-  const deleteBlock = (event) => {
-    const index = event.detail.block.index;
-
+  const deleteBlock = (index: number) => {
     pagesData.update((data) => {
       data.map((el) => {
         if (el.index === page.index) {
@@ -49,18 +45,20 @@
     });
   };
 
-  const updateBlock = (event) => {
-    const updatedBlock = event.detail.block;
+  // const updateBlock = (event) => {
+  //   const updatedBlock = event.detail.block;
 
-    pagesData.update((data) => {
-      data.map((el) => {
-        if (el.index === page.index) {
-          el.blocks.splice(updatedBlock.index, 1, updatedBlock);
-        }
-      });
-      return data;
-    });
-  };
+  //   pagesData.update((data) => {
+  //     data.map((el) => {
+  //       if (el.index === page.index) {
+  //         el.blocks.splice(updatedBlock.index, 1, updatedBlock);
+  //       }
+  //     });
+  //     return data;
+  //   });
+  // };
+
+  $: availableBlocks = [...$blocksData].filter((el) => !page.blocks.map(block => block.id).includes(el.id));
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -72,7 +70,7 @@
     x Supprimer la page {page.index + 1}
   </p>
 
-  <h2>Page {page.index + 1}</h2>
+  <h3>Page {page.index + 1}</h3>
 
   <div class="generator__flex">
     <p class="generator__form_label">Couleur de fond</p>
@@ -86,10 +84,18 @@
 
   <div class="generator__page_blocks">
     {#each page.blocks as block}
-      <Block {block} on:delete={deleteBlock} on:update={updateBlock} />
+      <p>Bloc {block.id}</p>
+      <p on:click={() => deleteBlock(block.id)}>x Supprimer</p>
     {/each}
-    <div class="generator__new-block" on:click={addBlock}>
-      <p>Nouveau bloc</p>
+
+    <div>
+      <p>Nouveau bloc :</p>
+      <select bind:value={selectedBlock}>
+        {#each availableBlocks as block}
+          <option value={block.id}>{block.id}</option>
+        {/each}
+      </select>
+      <p on:click={addBlock}>Ajouter</p>
     </div>
   </div>
 </div>
@@ -104,35 +110,8 @@
       margin-top: 20px;
     }
 
-    h2 {
+    h3 {
       padding-bottom: 12px;
-    }
-  }
-
-  .generator__page_blocks {
-    padding-top: 12px;
-    display: flex;
-    align-items: flex-start;
-    overflow-x: scroll;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
-  .generator__new-block {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.8em;
-
-    p::before {
-      content: "+";
-      display: block;
-      font-size: 2em;
     }
   }
 </style>

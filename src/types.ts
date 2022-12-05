@@ -4,7 +4,7 @@ export type TransitionData = [string, string|number|undefined]
 
 export interface BlockData {
   index?: number
-  id?: string
+  id?: any
   depth?: string
   type?: string
   layout?: string
@@ -12,6 +12,7 @@ export interface BlockData {
   content?: string
   transitions?: TransitionData[]
   mobileTransitions?: TransitionData[]
+  zIndex?: number
 }
 
 export interface PageData {

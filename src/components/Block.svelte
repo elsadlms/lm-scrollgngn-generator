@@ -4,6 +4,7 @@
   import Transition from "./Transition.svelte";
 
   import type { BlockData } from "../types";
+  import { blocksData } from "../stores";
 
   export let block: BlockData;
 
@@ -12,14 +13,16 @@
 
   let optionsOpen = false;
 
-  const dispatch = createEventDispatcher();
-
   const deleteBlock = () => {
-    dispatch("delete", { block });
+    blocksData.update((data) => {
+      data.splice(block.index, 1);
+      data.map((el, i) => (el.index = i));
+      return data;
+    });
   };
 
   const updateBlock = () => {
-    dispatch("update", { block });
+    blocksData.update((data) => data);
   };
 
   const addTransition = (properties: {
@@ -77,6 +80,13 @@
 
   <h3>Bloc {block.index + 1}</h3>
 
+  <p class="generator__form_label">Id</p>
+  <p
+    on:keyup={updateBlock}
+    bind:textContent={block.id}
+    contenteditable="true"
+  />
+
   <div class="generator__flex">
     <p class="generator__form_label">Type</p>
     <select bind:value={block.type} on:change={updateBlock}>
@@ -130,6 +140,15 @@
       {/if}
 
       {#if block.depth != "scroll"}
+        <div class="generator__flex">
+          <p>z-index :</p>
+          <input
+            type="number"
+            bind:value={block.zIndex}
+            on:change={updateBlock}
+          />
+        </div>
+
         <p class="generator__form_label">Transitions d'entrée</p>
         {#each block.transitions.filter( (el) => el[0].startsWith("in") ) as transition}
           <Transition on:update={updateBlock} {transition} direction="in" />
@@ -167,7 +186,7 @@
           </p>
 
           <p class="generator__form_label">Transitions MOBILE de sortie</p>
-          {#each block.transitions.filter( (el) => el[0].startsWith("out") ) as transition}
+          {#each block.mobileTransitions.filter( (el) => el[0].startsWith("out") ) as transition}
             <Transition on:update={updateBlock} {transition} direction="out" />
           {/each}
           <p on:click={() => addTransition({ direction: "out", mobile: true })}>
@@ -184,7 +203,7 @@
   .generator__block {
     padding: 20px;
     min-width: 350px;
-    margin-left: 20px;
+    // margin-left: 20px;
     border: 1px dashed #a6a9b1;
     background-color: rgba(255, 255, 255, 0.6);
     font-size: 0.9em;
