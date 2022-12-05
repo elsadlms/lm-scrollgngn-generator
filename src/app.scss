@@ -1,0 +1,72 @@
+p, pre, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.generator {
+  --gen-gutter: 20px;
+  --gen-lighter-grey: rgba(245, 246, 248, 0.5);
+  --gen-light-grey: #E8EAEE;
+  --gen-grey: #D5D8DC;
+  --gen-dark-grey: #2A303C;
+  font-family: Marr Sans;
+  color: var(--gen-dark-grey);
+  max-width: 1024px;
+  margin: 32px auto;
+}
+
+.generator__flex {
+  display: flex;
+  align-items: center;
+
+  :last-child {
+    margin-left: 0.8em;
+  }
+}
+
+.generator__form_button {
+  display: inline-block;
+  cursor: pointer;
+  // padding: 12px;
+  // border: 1px solid var(--gen-dark-grey);
+}
+
+.generator select {
+  color: var(--gen-dark-grey);
+}
+
+.generator select,
+.generator input {
+  padding: 6px;
+  font-size: 0.9em;
+}
+
+.generator label + input[type="text"],
+.generator label + select {
+  margin-top: 6px;
+}
+
+.generator input[type="checkbox"] {
+  height: 16px;
+  width: 16px;
+  margin-right: 6px;
+}
+
+.generator input[type="number"] {
+  padding: 2px;
+}
+
+.generator__form_label {
+  font-weight: 600;
+}
+
+.generator__form_button-delete {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  padding-bottom: 0.8em;
+  cursor: pointer;
+}
