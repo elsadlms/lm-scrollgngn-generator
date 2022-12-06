@@ -19,14 +19,10 @@
   };
 
   const addBlock = () => {
-    const newBlock: BlockData = $blocksData.find(
-      (el) => el.id === selectedBlock
-    );
-
     pagesData.update((data) => {
       data.map((el) => {
         if (el.index === page.index) {
-          el.blocks = [...el.blocks, newBlock];
+          el.blocks = [...el.blocks, selectedBlock];
         }
       });
       return data;
@@ -38,7 +34,6 @@
       data.map((el) => {
         if (el.index === page.index) {
           el.blocks.splice(index, 1);
-          el.blocks.map((block, i) => (block.index = i));
         }
       });
       return data;
@@ -58,7 +53,9 @@
   //   });
   // };
 
-  $: availableBlocks = [...$blocksData].filter((el) => !page.blocks.map(block => block.id).includes(el.id));
+  $: availableBlocks = [...$blocksData].filter(
+    (el) => !page.blocks.includes(el.id)
+  );
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -83,9 +80,9 @@
   </div>
 
   <div class="generator__page_blocks">
-    {#each page.blocks as block}
-      <p>Bloc {block.id}</p>
-      <p on:click={() => deleteBlock(block.id)}>x Supprimer</p>
+    {#each page.blocks as block, index}
+      <p>Bloc {block}</p>
+      <p on:click={() => deleteBlock(index)}>x Supprimer</p>
     {/each}
 
     <div>

@@ -1,9 +1,17 @@
 <script lang="ts">
-  import { pagesData } from "../stores.js";
+  import { pagesData, blocksData } from "../stores.js";
 
   let notification = false;
 
-  $: output = JSON.stringify($pagesData, null, 4);
+  $: data = [...$pagesData].map((page) => {
+    const pageData = { ...page };
+    pageData.blocks = page.blocks.map((el) =>
+      $blocksData.find((block) => block.id === el)
+    );
+    return pageData;
+  });
+
+  $: output = JSON.stringify(data, null, 4);
 
   $: notificationActiveClass = notification
     ? "generator__snippet_copy-notification generator__snippet_copy-notification--active"

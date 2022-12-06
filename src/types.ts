@@ -18,5 +18,5 @@ export interface BlockData {
 export interface PageData {
   index?: number;
   backgroundColor?: string;
-  blocks?: BlockData[]
+  blocks?: any[]
 }
