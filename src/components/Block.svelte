@@ -232,23 +232,4 @@
     }
   }
 
-  .generator__toggle {
-    display: flex;
-    align-items: center;
-    padding-top: 1em;
-    cursor: pointer;
-
-    &::before {
-      content: "▶︎";
-      font-size: 0.66em;
-      padding-right: 0.66em;
-      transition: transform 200ms;
-    }
-
-    &--open {
-      &::before {
-        transform: rotate(90deg) translate(2px, 2px);
-      }
-    }
-  }
 </style>

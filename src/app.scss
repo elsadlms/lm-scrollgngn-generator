@@ -1,4 +1,11 @@
-p, pre, h1, h2, h3, h4, h5, h6 {
+p,
+pre,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   padding: 0;
 }
@@ -45,8 +52,8 @@ p, pre, h1, h2, h3, h4, h5, h6 {
   font-size: 0.9em;
 }
 
-.generator label + input[type="text"],
-.generator label + select {
+.generator label+input[type="text"],
+.generator label+select {
   margin-top: 6px;
 }
 
@@ -69,4 +76,24 @@ p, pre, h1, h2, h3, h4, h5, h6 {
   font-size: 0.8em;
   padding-bottom: 0.8em;
   cursor: pointer;
+}
+
+.generator__toggle {
+  display: flex;
+  align-items: center;
+  padding-top: 1em;
+  cursor: pointer;
+
+  &::before {
+    content: "▶︎";
+    font-size: 0.66em;
+    padding-right: 0.66em;
+    transition: transform 200ms;
+  }
+
+  &--open {
+    &::before {
+      transform: rotate(90deg) translate(0.2em, 0.3em);
+    }
+  }
 }
