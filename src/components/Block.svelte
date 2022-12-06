@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import Transition from "./Transition.svelte";
 
   import type { BlockData } from "../types";
@@ -11,7 +9,7 @@
   let mobileTransitions = false;
   let mobileLayout = false;
 
-  let optionsOpen = false;
+  let optionsOpen = true;
 
   const deleteBlock = () => {
     blocksData.update((data) => {
@@ -33,6 +31,18 @@
       block.mobileTransitions.push([`${properties.direction}-fade`, 600]);
     } else {
       block.transitions.push([`${properties.direction}-fade`, 600]);
+    }
+    updateBlock();
+  };
+
+  const deleteTransition = (properties: {
+    index: number;
+    mobile?: boolean;
+  }) => {
+    if (properties.mobile) {
+      block.mobileTransitions.splice(properties.index, 1);
+    } else {
+      block.transitions.splice(properties.index, 1);
     }
     updateBlock();
   };
@@ -149,21 +159,20 @@
           />
         </div>
 
-        <p class="generator__form_label">Transitions d'entrée</p>
-        {#each block.transitions.filter( (el) => el[0].startsWith("in") ) as transition}
-          <Transition on:update={updateBlock} {transition} direction="in" />
-        {/each}
-        <p on:click={() => addTransition({ direction: "in" })}>
-          + Nouvelle transition d'entrée
-        </p>
+        {#each ["in", "out"] as direction}
+          <p class="generator__form_label">Transitions {direction}</p>
 
-        <p class="generator__form_label">Transitions de sortie</p>
-        {#each block.transitions.filter( (el) => el[0].startsWith("out") ) as transition}
-          <Transition on:update={updateBlock} {transition} direction="out" />
+          {#each block.transitions as transition, index}
+            {#if transition[0].startsWith(direction)}
+              <Transition on:update={updateBlock} {transition} {direction} />
+              <p on:click={() => deleteTransition({ index })}>X</p>
+            {/if}
+          {/each}
+
+          <p on:click={() => addTransition({ direction })}>
+            + Nouvelle transition {direction}
+          </p>
         {/each}
-        <p on:click={() => addTransition({ direction: "out" })}>
-          + Nouvelle transition de sortie
-        </p>
 
         <div>
           <input
@@ -177,21 +186,22 @@
         </div>
 
         {#if mobileTransitions}
-          <p class="generator__form_label">Transitions MOBILE d'entrée</p>
-          {#each block.mobileTransitions.filter( (el) => el[0].startsWith("in") ) as transition}
-            <Transition on:update={updateBlock} {transition} direction="in" />
-          {/each}
-          <p on:click={() => addTransition({ direction: "in", mobile: true })}>
-            + Nouvelle transition d'entrée
-          </p>
+          {#each ["in", "out"] as direction}
+            <p class="generator__form_label">Transitions MOBILE {direction}</p>
 
-          <p class="generator__form_label">Transitions MOBILE de sortie</p>
-          {#each block.mobileTransitions.filter( (el) => el[0].startsWith("out") ) as transition}
-            <Transition on:update={updateBlock} {transition} direction="out" />
+            {#each block.mobileTransitions as transition, index}
+              {#if transition[0].startsWith(direction)}
+                <Transition on:update={updateBlock} {transition} {direction} />
+                <p on:click={() => deleteTransition({ index, mobile: true })}>
+                  X
+                </p>
+              {/if}
+            {/each}
+
+            <p on:click={() => addTransition({ direction, mobile: true })}>
+              + Nouvelle transition {direction}
+            </p>
           {/each}
-          <p on:click={() => addTransition({ direction: "out", mobile: true })}>
-            + Nouvelle transition de sortie
-          </p>
         {/if}
       {/if}
     </div>
