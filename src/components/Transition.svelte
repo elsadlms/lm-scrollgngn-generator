@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
+  import { transitionOptions } from "../options";
   import type { TransitionData } from "../types";
 
   export let transition: TransitionData;
@@ -17,8 +18,9 @@
   <div class="generator__flex">
     <p>Nom :</p>
     <select bind:value={transition[0]} on:change={updateTransition}>
-      <option value={`${direction}-fade`}>Fade</option>
-      <option value={`${direction}-grow`}>Grow</option>
+      {#each transitionOptions as option}
+        <option value={`${direction}-${option}`}>{option}</option>
+      {/each}
     </select>
   </div>
 

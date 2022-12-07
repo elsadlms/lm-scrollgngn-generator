@@ -1,14 +1,19 @@
-export type TransitionData = [string, string|number|undefined]
+import type { transitionOptions } from "./options"
 
-// export type TransitionData = any[]
+type TransitionName = typeof transitionOptions[number]
+type TransitionDuration = string|number
+export type TransitionData = [TransitionName]|[TransitionName, TransitionDuration]
+
+type BlockDataLayout = 'default'|'left-half'|'right-half'
 
 export interface BlockData {
   index?: number
-  id?: any
-  depth?: string
-  type?: string
-  layout?: string
-  mobileLayout?: string
+  id?: string
+  name?: string
+  depth?: 'scroll'|'front'|'back'
+  type?: 'html'|'module'
+  layout?: BlockDataLayout
+  mobileLayout?: BlockDataLayout
   content?: string
   transitions?: TransitionData[]
   mobileTransitions?: TransitionData[]

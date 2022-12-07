@@ -4,7 +4,7 @@
 
   import type { BlockData } from "../types";
   import { pagesData, blocksData } from "../stores";
-  import { defaultBlock } from "../models";
+  import { defaultBlock, defaultPage } from "../models";
 
   let blocksOpen = true;
   let pagesOpen = true;
@@ -28,16 +28,18 @@
   const addPage = () => {
     const newPage = {
       index: $pagesData.length,
-      backgroundColor: "#fff",
-      blocks: []
+      ...defaultPage
     };
     pagesData.update((data) => [...data, newPage]);
   };
 
   const addBlock = () => {
+    const randomID = Math.random().toString(36).slice(2)
+
     const newBlock: BlockData = {
       index: $blocksData.length,
-      id: Date.now(),
+      id: randomID,
+      name: randomID,
       ...defaultBlock
     };
 
@@ -55,8 +57,8 @@
       {#each $blocksData as block}
         <Block {block} />
       {/each}
+      <div class="generator__new-block" on:click={addBlock}><p>+ Ajouter un bloc</p></div>
     </div>
-    <p on:click={addBlock}>Ajouter un bloc</p>
   {/if}
 
   <h2 class={pagesToggleClass} on:click={togglePages}>Pages</h2>
@@ -70,8 +72,34 @@
   {/if}
 </form>
 
-<style>
+<style lang="scss">
   .generator__form {
-    padding: 32px 0;
+    padding-bottom: 64px;
+  }
+
+  .generator__blocks {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 600px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 1000px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .generator__new-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    p {
+      font-size: 0.9em;
+    }
   }
 </style>

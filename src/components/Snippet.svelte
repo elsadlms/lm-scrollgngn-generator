@@ -5,9 +5,11 @@
 
   $: data = [...$pagesData].map((page) => {
     const pageData = { ...page };
-    pageData.blocks = page.blocks.map((el) =>
-      $blocksData.find((block) => block.id === el)
-    );
+    pageData.blocks = page.blocks.map((el) => {
+      const { index, name, ...block } = $blocksData.find((block) => block.id === el);
+      block.id = name
+      return block
+    });
     return pageData;
   });
 

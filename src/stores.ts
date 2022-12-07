@@ -9,7 +9,8 @@ export const pagesData: Writable<PageData[]> = writable([])
 export const blocksData: Writable<BlockData[]> = writable([
   {
     "index": 0,
-    "id": 'bloc0',
+    "id": '1670334959316',
+    "name": 'bloc0',
     "depth": "scroll",
     "type": "html",
     "layout": "default",
@@ -23,7 +24,8 @@ export const blocksData: Writable<BlockData[]> = writable([
   },
   {
     "index": 1,
-    "id": 'bloc1',
+    "id": '1670334965516',
+    "name": 'bloc1',
     "depth": "scroll",
     "type": "html",
     "layout": "default",
@@ -39,7 +41,7 @@ export const blocksData: Writable<BlockData[]> = writable([
 
 // {
 //   "index": 0,
-//   "backgroundColor": "#fff",
+//   "backgroundColor": "#ffffff",
 //   "blocks": [
 //       {
 //           "index": 0,
@@ -84,11 +86,11 @@ export const blocksData: Writable<BlockData[]> = writable([
 // },
 // {
 //   "index": 1,
-//   "backgroundColor": "#fff",
+//   "backgroundColor": "#ffffff",
 //   "blocks": []
 // },
 // {
 //   "index": 2,
-//   "backgroundColor": "#fff",
+//   "backgroundColor": "#ffffff",
 //   "blocks": []
 // }

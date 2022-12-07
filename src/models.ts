@@ -1,4 +1,6 @@
-export const defaultBlock = {
+import type { BlockData, PageData } from "./types"
+
+export const defaultBlock: BlockData = {
   depth: 'scroll',
   type: 'html',
   layout: 'default',
@@ -6,7 +8,7 @@ export const defaultBlock = {
   transitions: [],
 }
 
-export const defaultPage = {
-  backgroundColor: '#fff',
+export const defaultPage: PageData = {
+  backgroundColor: '#ffffff',
   blocks: []
 }

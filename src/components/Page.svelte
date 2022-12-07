@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { BlockData, PageData } from "../types";
-  import { blocksData, pagesData, error } from "../stores.js";
+  import type { PageData } from "../types";
+  import { blocksData, pagesData } from "../stores.js";
 
   export let page: PageData;
 
-  let selectedBlock;
+  let selectedBlock: string | null = null;
 
   const deletePage = () => {
     pagesData.update((data) => {
@@ -27,6 +27,7 @@
       });
       return data;
     });
+    selectedBlock = null;
   };
 
   const deleteBlock = (index: number) => {
@@ -40,22 +41,13 @@
     });
   };
 
-  // const updateBlock = (event) => {
-  //   const updatedBlock = event.detail.block;
-
-  //   pagesData.update((data) => {
-  //     data.map((el) => {
-  //       if (el.index === page.index) {
-  //         el.blocks.splice(updatedBlock.index, 1, updatedBlock);
-  //       }
-  //     });
-  //     return data;
-  //   });
-  // };
-
   $: availableBlocks = [...$blocksData].filter(
     (el) => !page.blocks.includes(el.id)
   );
+
+  $: addBlockClass = `generator__page_add-block ${
+    availableBlocks.length === 0 ? `generator__page_add-block--disabled` : ``
+  }`;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -71,28 +63,34 @@
 
   <div class="generator__flex">
     <p class="generator__form_label">Couleur de fond</p>
-    <p
-      class="generator__form_input-text"
-      on:keyup={updateData}
-      bind:textContent={page.backgroundColor}
-      contenteditable="true"
-    />
+    <input
+      class="generator__form_input-color"
+      type="color"
+      on:change={updateData}
+      bind:value={page.backgroundColor}
+    >
   </div>
 
   <div class="generator__page_blocks">
     {#each page.blocks as block, index}
-      <p>Bloc {block}</p>
+      <p>Bloc {$blocksData.find((el) => el.id === block).name}</p>
       <p on:click={() => deleteBlock(index)}>x Supprimer</p>
     {/each}
 
-    <div>
-      <p>Nouveau bloc :</p>
-      <select bind:value={selectedBlock}>
-        {#each availableBlocks as block}
-          <option value={block.id}>{block.id}</option>
-        {/each}
-      </select>
-      <p on:click={addBlock}>Ajouter</p>
+    <div class={addBlockClass}>
+      <p>Nouveau bloc</p>
+      {#if availableBlocks.length > 0}
+        <select bind:value={selectedBlock}>
+          {#each availableBlocks as block}
+            <option value={block.id}>{block.name}</option>
+          {/each}
+        </select>
+        {#if selectedBlock}
+          <p on:click={addBlock}>Ajouter</p>
+        {/if}
+      {:else}
+        <p>Cette page contient déjà tous les blocs existants.</p>
+      {/if}
     </div>
   </div>
 </div>
@@ -110,5 +108,10 @@
     h3 {
       padding-bottom: 12px;
     }
+  }
+
+  .generator__page_add-block--disabled {
+    opacity: 0.6;
+    pointer-events: none;
   }
 </style>

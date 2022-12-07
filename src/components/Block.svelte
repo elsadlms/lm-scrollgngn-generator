@@ -1,6 +1,8 @@
 <script lang="ts">
   import Transition from "./Transition.svelte";
 
+  import { typeOptions, depthOptions, layoutOptions } from "../options";
+
   import type { BlockData } from "../types";
   import { blocksData } from "../stores";
 
@@ -11,7 +13,11 @@
 
   let optionsOpen = true;
 
+  console.log(block.type);
+
   const deleteBlock = () => {
+    // const blockIndex = $blocksData.find(el => el.id === block.id)
+
     blocksData.update((data) => {
       data.splice(block.index, 1);
       data.map((el, i) => (el.index = i));
@@ -88,21 +94,29 @@
     x Supprimer
   </p>
 
-  <h3>Bloc {block.index + 1}</h3>
-
-  <p class="generator__form_label">Id</p>
-  <p
-    on:keyup={updateBlock}
-    bind:textContent={block.id}
-    contenteditable="true"
-  />
+  <h3>
+    Bloc
+    <span
+      on:keyup={updateBlock}
+      bind:textContent={block.name}
+      contenteditable="true"
+    />
+  </h3>
 
   <div class="generator__flex">
     <p class="generator__form_label">Type</p>
-    <select bind:value={block.type} on:change={updateBlock}>
-      <option value="html">Bloc html</option>
-      <option value="module">Module</option>
-    </select>
+    {#each typeOptions as option}
+      <label>
+        <input
+          type="radio"
+          name="type"
+          bind:group={block.type}
+          on:change={updateBlock}
+          value={option}
+        />
+        {option}
+      </label>
+    {/each}
   </div>
 
   <p class="generator__form_label">Contenu</p>
@@ -118,18 +132,32 @@
   {#if optionsOpen}
     <div class="generator__block_options">
       <p class="generator__form_label">Position</p>
-      <select bind:value={block.depth} on:change={updateBlock}>
-        <option value="scroll">Scroll</option>
-        <option value="front">Front</option>
-        <option value="back">Back</option>
-      </select>
+      {#each depthOptions as option}
+        <label>
+          <input
+            type="radio"
+            name="depth"
+            bind:group={block.depth}
+            on:change={updateBlock}
+            value={option}
+          />
+          {option}
+        </label>
+      {/each}
 
       <p class="generator__form_label">Layout</p>
-      <select bind:value={block.layout} on:change={updateBlock}>
-        <option value="default">Par défaut</option>
-        <option value="left-half">Moitié gauche</option>
-        <option value="right-half">Moitié droite</option>
-      </select>
+      {#each layoutOptions as option}
+        <label>
+          <input
+            type="radio"
+            name="layout"
+            bind:group={block.layout}
+            on:change={updateBlock}
+            value={option}
+          />
+          {option}
+        </label>
+      {/each}
 
       <div>
         <input
@@ -142,11 +170,18 @@
 
       {#if mobileLayout}
         <p class="generator__form_label">Layout mobile</p>
-        <select bind:value={block.mobileLayout} on:change={updateBlock}>
-          <option value="default">Par défaut</option>
-          <option value="left-half">Moitié gauche</option>
-          <option value="right-half">Moitié droite</option>
-        </select>
+        {#each layoutOptions as option}
+          <label>
+            <input
+              type="radio"
+              name="mobilelayout"
+              bind:group={block.mobileLayout}
+              on:change={updateBlock}
+              value={option}
+            />
+            {option}
+          </label>
+        {/each}
       {/if}
 
       {#if block.depth != "scroll"}
@@ -212,8 +247,6 @@
   .generator__new-block,
   .generator__block {
     padding: 20px;
-    min-width: 350px;
-    // margin-left: 20px;
     border: 1px dashed #a6a9b1;
     background-color: rgba(255, 255, 255, 0.6);
     font-size: 0.9em;
@@ -231,5 +264,4 @@
       min-height: 100px;
     }
   }
-
 </style>
