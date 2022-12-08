@@ -4,7 +4,7 @@
   import { typeOptions, depthOptions, layoutOptions } from "../options";
 
   import type { BlockData } from "../types";
-  import { blocksData } from "../stores";
+  import { blocksData, pagesData } from "../stores";
 
   export let block: BlockData;
 
@@ -13,16 +13,33 @@
 
   let optionsOpen = true;
 
-  console.log(block.type);
-
   const deleteBlock = () => {
-    // const blockIndex = $blocksData.find(el => el.id === block.id)
+    const blockIndex = $blocksData.findIndex((el) => el.id === block.id);
 
-    blocksData.update((data) => {
-      data.splice(block.index, 1);
-      data.map((el, i) => (el.index = i));
+    pagesData.update((data) => {
+      data.map((page) => {
+        if (page.blocks.includes(block.name)) {
+          const indexToDelete = page.blocks.findIndex(
+            (el) => el === block.name
+          );
+          page.blocks.splice(indexToDelete, 1);
+        }
+        return page;
+      });
       return data;
     });
+
+    blocksData.update((data) => {
+      data.splice(blockIndex, 1);
+      return data;
+    });
+  };
+
+  const updateBlockType = () => {
+    if (block.type === "module" && block.depth === "scroll") {
+      block.depth = "back";
+    }
+    updateBlock();
   };
 
   const updateBlock = () => {
@@ -109,9 +126,9 @@
       <label>
         <input
           type="radio"
-          name="type"
+          name={`type-${block.id}`}
           bind:group={block.type}
-          on:change={updateBlock}
+          on:change={updateBlockType}
           value={option}
         />
         {option}
@@ -132,11 +149,11 @@
   {#if optionsOpen}
     <div class="generator__block_options">
       <p class="generator__form_label">Position</p>
-      {#each depthOptions as option}
+      {#each depthOptions.filter( (el) => (block.type === "module" ? el != "scroll" : el) ) as option}
         <label>
           <input
             type="radio"
-            name="depth"
+            name={`depth-${block.id}`}
             bind:group={block.depth}
             on:change={updateBlock}
             value={option}
@@ -150,7 +167,7 @@
         <label>
           <input
             type="radio"
-            name="layout"
+            name={`layout-${block.id}`}
             bind:group={block.layout}
             on:change={updateBlock}
             value={option}
@@ -161,11 +178,13 @@
 
       <div>
         <input
-          name="mobileLayout"
+          name={`mobile-layout-check-${block.id}`}
           type="checkbox"
           on:input={toggleMobileLayout}
         />
-        <label for="mobileLayout">Layout différent sur mobile ?</label>
+        <label for={`mobile-layout-check-${block.id}`}
+          >Layout différent sur mobile ?</label
+        >
       </div>
 
       {#if mobileLayout}
@@ -174,7 +193,7 @@
           <label>
             <input
               type="radio"
-              name="mobilelayout"
+              name={`mobile-layout-${block.id}`}
               bind:group={block.mobileLayout}
               on:change={updateBlock}
               value={option}
@@ -211,11 +230,11 @@
 
         <div>
           <input
-            name="mobileTransitions"
+            name={`mobile-transitions-check-${block.id}`}
             type="checkbox"
             on:input={toggleMobileTransitions}
           />
-          <label for="mobileTransitions"
+          <label for={`mobile-transitions-check-${block.id}`}
             >Transitions différentes sur mobile ?</label
           >
         </div>
