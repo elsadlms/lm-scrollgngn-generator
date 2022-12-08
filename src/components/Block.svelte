@@ -8,6 +8,8 @@
 
   export let block: BlockData;
 
+  let error = "";
+
   let mobileTransitions = false;
   let mobileLayout = false;
 
@@ -37,22 +39,34 @@
 
   const duplicateBlock = () => {
     let i = 2;
-    let newID = `${block.name} (${i})`
-    while ($blocksData.find(el => el.name === newID)) {
-      i++
-      newID = `${block.name} (${i})`
+    let newID = `${block.name} (${i})`;
+    while ($blocksData.find((el) => el.name === newID)) {
+      i++;
+      newID = `${block.name} (${i})`;
     }
 
     const newBlock: BlockData = {
       ...block,
-      index: $blocksData.length,
       id: newID,
-      name: newID,
+      name: newID
     };
 
     blocksData.update((data) => {
       return [...data, newBlock];
     });
+  };
+
+  const updateBlockName = () => {
+    const sameNameArray: BlockData[] = $blocksData.filter(
+      (el) => el.name === block.name
+    );
+
+    if (sameNameArray.length > 1) {
+      error = "Un bloc du même nom existe déjà !";
+    } else {
+      error = "";
+      updateBlock();
+    }
   };
 
   const updateBlockType = () => {
@@ -127,6 +141,12 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="generator__block">
+  {#if error}
+    <p class="generator__form_error">
+      {error}
+    </p>
+  {/if}
+
   <p class="generator__form_button-delete" on:click={deleteBlock}>
     x Supprimer
   </p>
@@ -138,7 +158,7 @@
   <h3>
     Bloc
     <span
-      on:keyup={updateBlock}
+      on:keyup={updateBlockName}
       bind:textContent={block.name}
       contenteditable="true"
     />

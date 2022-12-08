@@ -7,7 +7,6 @@ export type TransitionData = [TransitionName]|[TransitionName, TransitionDuratio
 type BlockDataLayout = 'default'|'left-half'|'right-half'
 
 export interface BlockData {
-  index?: number
   id?: string
   name?: string
   depth?: 'scroll'|'front'|'back'

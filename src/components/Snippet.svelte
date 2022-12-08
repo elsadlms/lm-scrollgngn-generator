@@ -4,11 +4,11 @@
   let notification = false;
 
   $: data = [...$pagesData].map((page) => {
-    const pageData = { ...page };
+    const { index, ...pageData } = { ...page };
     pageData.blocks = page.blocks.map((el) => {
-      const { index, name, ...block } = $blocksData.find((block) => block.id === el);
-      block.id = name
-      return block
+      const { name, ...block } = $blocksData.find((block) => block.id === el);
+      block.id = name;
+      return block;
     });
     return pageData;
   });

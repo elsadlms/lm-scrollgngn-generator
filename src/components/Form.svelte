@@ -37,7 +37,6 @@
     const randomID = Math.random().toString(36).slice(2)
 
     const newBlock: BlockData = {
-      index: $blocksData.length,
       id: randomID,
       name: randomID,
       ...defaultBlock
