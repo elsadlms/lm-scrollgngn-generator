@@ -35,6 +35,26 @@
     });
   };
 
+  const duplicateBlock = () => {
+    let i = 2;
+    let newID = `${block.name} (${i})`
+    while ($blocksData.find(el => el.name === newID)) {
+      i++
+      newID = `${block.name} (${i})`
+    }
+
+    const newBlock: BlockData = {
+      ...block,
+      index: $blocksData.length,
+      id: newID,
+      name: newID,
+    };
+
+    blocksData.update((data) => {
+      return [...data, newBlock];
+    });
+  };
+
   const updateBlockType = () => {
     if (block.type === "module" && block.depth === "scroll") {
       block.depth = "back";
@@ -109,6 +129,10 @@
 <div class="generator__block">
   <p class="generator__form_button-delete" on:click={deleteBlock}>
     x Supprimer
+  </p>
+
+  <p class="generator__form_button-duplicate" on:click={duplicateBlock}>
+    Dupliquer
   </p>
 
   <h3>
