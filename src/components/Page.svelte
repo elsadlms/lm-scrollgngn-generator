@@ -1,8 +1,12 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   import type { PageData } from "../types";
   import { blocksData, pagesData } from "../stores.js";
-
+  
   export let page: PageData;
+
+  const dispatch = createEventDispatcher();
 
   let selectedBlock: string | null = null;
 
@@ -30,6 +34,15 @@
     selectedBlock = null;
   };
 
+  const editBlock = (block: string) => {
+    page.blockEdited = block;
+    pagesData.update((data) => data);
+  };
+
+  const duplicateBlock = (block: string) => {
+    dispatch("duplicate", { block });
+  };
+
   const deleteBlock = (index: number) => {
     pagesData.update((data) => {
       data.map((el) => {
@@ -42,7 +55,7 @@
   };
 
   $: availableBlocks = [...$blocksData].filter(
-    (el) => !page.blocks.includes(el.id)
+    (el) => !page.blocks.includes(el.id) && el.id != page.blockEdited
   );
 
   $: addBlockClass = `generator__page_add-block ${
@@ -68,17 +81,22 @@
       type="color"
       on:change={updateData}
       bind:value={page.backgroundColor}
-    >
+    />
   </div>
 
   <div class="generator__page_blocks">
+    <p><b>Blocs</b></p>
+    <p>–––––––––––––––––––––––</p>
     {#each page.blocks as block, index}
       <p>Bloc {$blocksData.find((el) => el.id === block).name}</p>
       <p on:click={() => deleteBlock(index)}>x Supprimer</p>
+      <p on:click={() => editBlock(block)}>> Éditer</p>
+      <p on:click={() => duplicateBlock(block)}>= Dupliquer</p>
+      <p>–––––––––––––––––––––––</p>
     {/each}
 
     <div class={addBlockClass}>
-      <p>Nouveau bloc</p>
+      <p>Ajouter un bloc existant</p>
       {#if availableBlocks.length > 0}
         <select bind:value={selectedBlock}>
           {#each availableBlocks as block}
@@ -98,7 +116,7 @@
 <style lang="scss">
   .generator__page {
     padding: 20px;
-    background-color: #eff3fe;
+    background-color: #f1f5f9;
     border-radius: 6px;
 
     &:not(:first-child) {

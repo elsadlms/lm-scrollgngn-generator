@@ -1,10 +1,15 @@
 <script lang="ts">
+  import { saveAs } from "file-saver";
+
   import { pagesData, blocksData } from "../stores.js";
 
-  let notification = false;
+  import Info from "./Styled/Info.svelte";
+  import Button from "./Styled/Button.svelte";
+
+  let notificationActive = false;
 
   $: data = [...$pagesData].map((page) => {
-    const { index, ...pageData } = { ...page };
+    const { index, blockEdited, ...pageData } = { ...page };
     pageData.blocks = page.blocks.map((el) => {
       const { name, ...block } = $blocksData.find((block) => block.id === el);
       block.id = name;
@@ -15,9 +20,10 @@
 
   $: output = JSON.stringify(data, null, 4);
 
-  $: notificationActiveClass = notification
-    ? "generator__snippet_copy-notification generator__snippet_copy-notification--active"
-    : "generator__snippet_copy-notification";
+  const downloadOutput = () => {
+    const file = new Blob([output], { type: "application/json" });
+    saveAs(file, "scrllgngn.json");
+  };
 
   const copyOutputToClipboard = () => {
     if (!output) return;
@@ -27,24 +33,30 @@
 
     navigator.clipboard.writeText(output);
 
-    notification = true;
+    notificationActive = true;
 
     window.setTimeout(() => {
-      notification = false;
+      notificationActive = false;
     }, 2000);
   };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="generator__snippet">
-  <div class="generator__snippet_copy" on:click={copyOutputToClipboard}>
-    <p class="generator__snippet_copy-btn">Copier le code</p>
-    <p class={notificationActiveClass}>
-      Le code a été copié dans le presse-papier !
-    </p>
+<div class="generator__snippet_wrapper">
+  <div class="generator__snippet_buttons">
+    <Button on:click={downloadOutput}>Exporter au format json</Button>
+
+    <div class="generator__snippet_copy">
+      <Button on:click={copyOutputToClipboard}>Copier le code</Button>
+      <Info success active={notificationActive}>
+        Le code a été copié dans le presse-papier !
+      </Info>
+    </div>
   </div>
 
-  <pre>{output}</pre>
+  <div class="generator__snippet">
+    <pre>{output}</pre>
+  </div>
 </div>
 
 <style lang="scss">
@@ -55,38 +67,21 @@
     padding: 24px;
     border-radius: 6px;
 
-    pre {
-      margin-top: 32px;
+    &_buttons {
+      display: flex;
     }
+  }
+
+  .generator__snippet_buttons {
+    display: flex;
+    column-gap: 1em;
+    align-items: center;
+    margin-bottom: 1em;
   }
 
   .generator__snippet_copy {
     display: flex;
-    padding-bottom: 1em;
-    position: absolute;
-
-    &-btn {
-      text-transform: uppercase;
-      font-size: 0.9em;
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
-      transition: opacity 200ms;
-      cursor: pointer;
-
-      &:hover {
-        opacity: 0.6;
-      }
-    }
-
-    &-notification {
-      opacity: 0;
-      transition: opacity 200ms;
-      margin-left: 1em;
-      color: #a4ffb0;
-    }
-  }
-
-  .generator__snippet_copy-notification--active {
-    opacity: 0.8;
+    column-gap: 1em;
+    align-items: center;
   }
 </style>

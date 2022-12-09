@@ -1,11 +1,10 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  import { transitionOptions } from "../options";
-  import type { TransitionData } from "../types";
+  import { transitionOptions } from "../../options";
+  import type { TransitionData } from "../../types";
 
   export let transition: TransitionData;
-  export let direction: string;
 
   const dispatch = createEventDispatcher();
 
@@ -19,7 +18,7 @@
     <p>Nom :</p>
     <select bind:value={transition[0]} on:change={updateTransition}>
       {#each transitionOptions as option}
-        <option value={`${direction}-${option}`}>{option}</option>
+        <option value={option}>{option}</option>
       {/each}
     </select>
   </div>

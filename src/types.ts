@@ -23,4 +23,5 @@ export interface PageData {
   index?: number;
   backgroundColor?: string;
   blocks?: any[]
+  blockEdited?: string
 }
