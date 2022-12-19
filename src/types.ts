@@ -17,6 +17,7 @@ export interface BlockData {
   transitions?: TransitionData[]
   mobileTransitions?: TransitionData[]
   zIndex?: number
+  trackScroll?: boolean
 }
 
 export interface PageData {

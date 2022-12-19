@@ -113,6 +113,18 @@
     {/each}
   {/if}
 
+  {#if block.type === "module"}
+    <div>
+      <input
+        name={`trackscroll-${block.id}`}
+        type="checkbox"
+        bind:checked={block.trackScroll}
+        on:change={updateBlock}
+      />
+      <label for={`trackscroll-${block.id}`}>Track scroll</label>
+    </div>
+  {/if}
+
   {#if block.depth != "scroll"}
     <div class="generator__flex">
       <p>z-index :</p>
