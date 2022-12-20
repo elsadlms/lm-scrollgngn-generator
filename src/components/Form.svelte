@@ -1,6 +1,6 @@
 <script lang="ts">
   import Page from "./Page.svelte";
-  import Block from "./Block.svelte";
+  import Block from "./Block/BlockConstructor.svelte";
   import Button from "./Styled/Button.svelte";
 
   import type { BlockData } from "../types";

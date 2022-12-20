@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { BlockData } from "../types";
-  import { blocksData } from "../stores";
-  import { typeOptions } from "../options";
+  import type { BlockData } from "../../types";
+  import { blocksData } from "../../stores";
+  import { typeOptions } from "../../options";
   
-  import Info from "./Styled/Info.svelte";
-  import BlockOptions from "./Block/BlockOptions.svelte";
+  import Info from "../Styled/Info.svelte";
+  import BlockOptions from "./BlockOptions.svelte";
 
   export let block: BlockData;
 
@@ -113,10 +113,7 @@
     border-radius: 6px;
     font-size: 0.9em;
     transition: background-color 200ms;
-
-    &:first-child {
-      margin-left: 0;
-    }
+    margin: 20px;
   }
 
   @media (hover: hover) {

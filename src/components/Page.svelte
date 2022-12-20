@@ -3,7 +3,9 @@
 
   import type { PageData } from "../types";
   import { blocksData, pagesData } from "../stores.js";
-  
+
+  import BlockInfos from "./Block/BlockInfos.svelte";
+
   export let page: PageData;
 
   const dispatch = createEventDispatcher();
@@ -89,6 +91,7 @@
     <p>–––––––––––––––––––––––</p>
     {#each page.blocks as block, index}
       <p>Bloc {$blocksData.find((el) => el.id === block).name}</p>
+      <BlockInfos block={$blocksData.find((el) => el.id === block)} />
       <p on:click={() => deleteBlock(index)}>x Supprimer</p>
       <p on:click={() => editBlock(block)}>> Éditer</p>
       <p on:click={() => duplicateBlock(block)}>= Dupliquer</p>
