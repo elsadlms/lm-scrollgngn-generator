@@ -13,19 +13,21 @@
   .generator__button {
     display: inline-block;
     font-family: "Marr sans";
-    background-color: #e2e8f0;
-    color: #334155;
+    background-color: var(--gen-c-lighter);
     border: unset;
     cursor: pointer;
     font-size: 1em;
-    border-radius: 6px;
+    border-radius: var(--gen-border-radius);
     transition: background-color 200ms;
     padding: 0.75rem 1.5rem;
-    margin-top: 1em;
+
+    &--small {
+      padding: 0.5rem 1.5rem;
+    }
 
     @media (hover: hover) {
       &:hover {
-        background-color: #cbd5e1;
+        background-color: var(--gen-c-light);
       }
     }
   }

@@ -7,3 +7,4 @@ export const error: Writable<string> = writable('')
 
 export const pagesData: Writable<PageData[]> = writable([])
 export const blocksData: Writable<BlockData[]> = writable([])
+export const customCssData: Writable<string> = writable('// custom css')

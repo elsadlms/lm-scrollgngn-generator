@@ -16,6 +16,10 @@
 </main>
 
 <style lang="scss">
+  h1 {
+    margin-bottom: 32px;
+  }
+
   .generator__error {
     color: red;
   }

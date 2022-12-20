@@ -21,6 +21,7 @@ export interface BlockData {
 }
 
 export interface PageData {
+  content?: string;
   index?: number;
   backgroundColor?: string;
   blocks?: any[]

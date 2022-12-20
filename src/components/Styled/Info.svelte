@@ -2,21 +2,24 @@
   export let error: Boolean = false;
   export let success: Boolean = false;
   export let active: Boolean = true;
+  export let marginBottom: Number = 0;
 
   $: classList = `generator__info 
   ${error ? "generator__info--error" : ""} 
   ${success ? "generator__info--success" : ""} 
   ${active ? "generator__info--active" : ""} 
   `;
+
+  $: styles = `margin-bottom: ${marginBottom}px`;
 </script>
 
-<div class={classList}><slot /></div>
+<div class={classList} style={styles}><slot /></div>
 
 <style lang="scss">
   .generator__info {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    border-radius: 6px;
+    border-radius: var(--gen-border-radius);
     background-color: #f0f9ff;
     color: #0e7490;
     transition: opacity 200ms;

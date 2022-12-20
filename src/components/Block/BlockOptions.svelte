@@ -58,35 +58,39 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="generator__block_options">
-  <p class="generator__form_label">Position</p>
-  {#each depthOptions.filter( (el) => (block.type === "module" ? el != "scroll" : el) ) as option}
-    <label>
-      <input
-        type="radio"
-        name={`depth-${block.id}`}
-        bind:group={block.depth}
-        on:change={updateBlock}
-        value={option}
-      />
-      {option}
-    </label>
-  {/each}
+  <div class="generator__flex generator__form_group">
+    <p class="generator__form_label">Depth</p>
+    {#each depthOptions.filter( (el) => (block.type === "module" ? el != "scroll" : el) ) as option}
+      <label>
+        <input
+          type="radio"
+          name={`depth-${block.id}`}
+          bind:group={block.depth}
+          on:change={updateBlock}
+          value={option}
+        />
+        {option}
+      </label>
+    {/each}
+  </div>
 
-  <p class="generator__form_label">Layout</p>
-  {#each layoutOptions as option}
-    <label>
-      <input
-        type="radio"
-        name={`layout-${block.id}`}
-        bind:group={block.layout}
-        on:change={updateBlock}
-        value={option}
-      />
-      {option}
-    </label>
-  {/each}
+  <div class="generator__flex generator__form_group">
+    <p class="generator__form_label">Layout</p>
+    {#each layoutOptions as option}
+      <label>
+        <input
+          type="radio"
+          name={`layout-${block.id}`}
+          bind:group={block.layout}
+          on:change={updateBlock}
+          value={option}
+        />
+        {option}
+      </label>
+    {/each}
+  </div>
 
-  <div>
+  <div class="generator__flex generator__flex--small generator__form_group">
     <input
       name={`mobile-layout-check-${block.id}`}
       type="checkbox"
@@ -98,23 +102,25 @@
   </div>
 
   {#if mobileLayout}
-    <p class="generator__form_label">Layout mobile</p>
-    {#each layoutOptions as option}
-      <label>
-        <input
-          type="radio"
-          name={`mobile-layout-${block.id}`}
-          bind:group={block.mobileLayout}
-          on:change={updateBlock}
-          value={option}
-        />
-        {option}
-      </label>
-    {/each}
+    <div class="generator__flex generator__form_group">
+      <p class="generator__form_label">Layout mobile</p>
+      {#each layoutOptions as option}
+        <label>
+          <input
+            type="radio"
+            name={`mobile-layout-${block.id}`}
+            bind:group={block.mobileLayout}
+            on:change={updateBlock}
+            value={option}
+          />
+          {option}
+        </label>
+      {/each}
+    </div>
   {/if}
 
   {#if block.type === "module"}
-    <div>
+    <div class="generator__form_group generator__flex generator__flex--small">
       <input
         name={`trackscroll-${block.id}`}
         type="checkbox"
@@ -126,21 +132,35 @@
   {/if}
 
   {#if block.depth != "scroll"}
-    <div class="generator__flex">
-      <p>z-index :</p>
+    <div class="generator__form_group generator__flex">
+      <p class="generator__form_label">z-index :</p>
       <input type="number" bind:value={block.zIndex} on:change={updateBlock} />
     </div>
 
-    <p class="generator__form_label">Transitions</p>
+    <div class="generator__form_group">
+      <p class="generator__form_label generator__form_label--padding">
+        Transitions
+      </p>
 
-    {#each block.transitions as transition, index}
-      <Transition on:update={updateBlock} {transition} />
-      <p on:click={() => deleteTransition({ index })}>X</p>
-    {/each}
+      {#if block.transitions.length > 0}
+        <div class="generator__form_transitions">
+          {#each block.transitions as transition, index}
+            <Transition on:update={updateBlock} {transition}>
+              <p on:click={() => deleteTransition({ index })}>X</p>
+            </Transition>
+          {/each}
+        </div>
+      {/if}
 
-    <p on:click={() => addTransition({})}>+ Nouvelle transition</p>
+      <p
+        class="generator__form_button--uppercase"
+        on:click={() => addTransition({})}
+      >
+        + Nouvelle transition
+      </p>
+    </div>
 
-    <div>
+    <div class="generator__flex generator__flex--small generator__form_group">
       <input
         name={`mobile-transitions-check-${block.id}`}
         type="checkbox"
@@ -152,16 +172,36 @@
     </div>
 
     {#if mobileTransitions}
-      <p class="generator__form_label">Transitions MOBILE</p>
+      <div class="generator__form_group">
+        <p class="generator__form_label generator__form_label--padding">
+          Transitions mobile
+        </p>
 
-      {#each block.mobileTransitions as transition, index}
-        <Transition on:update={updateBlock} {transition} />
-        <p on:click={() => deleteTransition({ index, mobile: true })}>X</p>
-      {/each}
+        {#if block.mobileTransitions.length > 0}
+          <div class="generator__form_transitions">
+            {#each block.mobileTransitions as transition, index}
+              <Transition on:update={updateBlock} {transition}>
+                <p on:click={() => deleteTransition({ index, mobile: true })}>
+                  X
+                </p>
+              </Transition>
+            {/each}
+          </div>
+        {/if}
 
-      <p on:click={() => addTransition({ mobile: true })}>
-        + Nouvelle transition
-      </p>
+        <p
+          class="generator__form_button--uppercase"
+          on:click={() => addTransition({ mobile: true })}
+        >
+          + Nouvelle transition
+        </p>
+      </div>
     {/if}
   {/if}
 </div>
+
+<style lang="scss">
+  .generator__form_transitions {
+    padding-bottom: 12px;
+  }
+</style>

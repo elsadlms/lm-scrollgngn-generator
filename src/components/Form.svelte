@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CustomCSS from "./CustomCSS.svelte";
   import Page from "./Page.svelte";
   import Block from "./Block/BlockConstructor.svelte";
   import Button from "./Styled/Button.svelte";
@@ -77,29 +78,35 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <form class="generator__form">
+
+  <CustomCSS />
+
   <div class="generator__pages">
     {#each $pagesData as page}
       <Page
         on:duplicate={(e) => editBlock({ blockID: e.detail.block, page })}
         {page}
-      />
-
-      {#if !page.blockEdited}
-        <Button on:click={() => editBlock({ blockID: null, page })}>Nouveau bloc</Button>
-      {:else}
-        <div class="generator__new-block-2">
-          <Block
-            block={$blocksData.find((block) => block.id === page.blockEdited)}
-          />
-          {#if !page.blocks.includes(page.blockEdited)}
-            <Button on:click={() => addBlockToPage(page)}>
-              Ajouter le bloc à la page
-            </Button>
-          {:else}
-            <Button on:click={() => (page.blockEdited = null)}>Valider</Button>
-          {/if}
-        </div>
-      {/if}
+      >
+        {#if !page.blockEdited}
+          <Button on:click={() => editBlock({ blockID: null, page })}
+            >+ Nouveau bloc</Button
+          >
+        {:else}
+          <div class="generator__new-block-2">
+            <Block
+              block={$blocksData.find((block) => block.id === page.blockEdited)}
+            />
+            {#if !page.blocks.includes(page.blockEdited)}
+              <Button on:click={() => addBlockToPage(page)}>
+                Ajouter le bloc à la page
+              </Button>
+            {:else}
+              <Button on:click={() => (page.blockEdited = null)}>Valider</Button
+              >
+            {/if}
+          </div>
+        {/if}
+      </Page>
     {/each}
   </div>
 
@@ -131,18 +138,12 @@
     justify-content: center;
     text-transform: uppercase;
     cursor: pointer;
-
-    p {
-      font-size: 0.9em;
-      color: #475569;
-      transition: color 200ms;
-    }
   }
 
   @media (hover: hover) {
     .generator__new-block:hover {
       p {
-        color: #94a3b8;
+        color: var(--gen-c-neutral);
       }
     }
   }
