@@ -1,8 +1,10 @@
 <script lang="ts">
   export let small: Boolean = false;
+  export let disabled: Boolean = false;
 
   $: classList = `generator__button 
   ${small ? "generator__button--small" : ""}
+  ${disabled ? "generator__button--disabled" : ""}
   `;
 </script>
 
@@ -23,6 +25,11 @@
 
     &--small {
       padding: 0.5rem 1.5rem;
+    }
+
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.6;
     }
 
     @media (hover: hover) {

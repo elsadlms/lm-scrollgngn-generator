@@ -108,7 +108,6 @@ b {
   padding: 2px;
   background-color: var(--gen-c-lightest);
   border: 0;
-  border-bottom: 2px solid var(--gen-c-darker);
   color: var(--gen-c-darkest);
   padding: 0.4em 0.6em 0.2em;
   font-family: monospace;
@@ -186,7 +185,7 @@ b {
 }
 
 .generator__disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   pointer-events: none;
 }
 
@@ -203,4 +202,9 @@ b {
   padding: 12px;
   border-radius: 4px;
   font-family: monospace;
+}
+
+.generator__buttons-group {
+  display: flex;
+  column-gap: 1em;
 }

@@ -58,7 +58,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="generator__snippet_wrapper">
-  <div class="generator__snippet_buttons">
+  <div class="generator__buttons-group">
     <Button on:click={downloadOutput}>Exporter au format json</Button>
 
     <div class="generator__snippet_copy">
@@ -81,17 +81,11 @@
     overflow-x: scroll;
     padding: 24px;
     border-radius: var(--gen-border-radius);
+    margin-top: 1em;
 
     &_buttons {
       display: flex;
     }
-  }
-
-  .generator__snippet_buttons {
-    display: flex;
-    column-gap: 1em;
-    align-items: center;
-    margin-bottom: 1em;
   }
 
   .generator__snippet_copy {

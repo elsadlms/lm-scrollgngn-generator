@@ -62,7 +62,6 @@
       background-color: var(--gen-c-lightest);
       align-self: stretch;
       border-radius: 0;
-      border-bottom: 2px solid var(--gen-c-darkest);
       font-family: monospace;
     }
   }

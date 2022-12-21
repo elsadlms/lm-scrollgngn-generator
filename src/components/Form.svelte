@@ -1,11 +1,12 @@
 <script lang="ts">
+  import SettingsForm from "./SettingsForm.svelte";
   import CustomCSS from "./CustomCSS.svelte";
   import Page from "./Page.svelte";
   import Block from "./Block/BlockConstructor.svelte";
   import Button from "./Styled/Button.svelte";
 
   import type { BlockData } from "../types";
-  import { pagesData, blocksData } from "../stores";
+  import { pagesData, blocksData, error } from "../stores";
   import { defaultBlock, defaultPage } from "../models";
   import { getRandomId } from "../utils";
 
@@ -60,6 +61,18 @@
     });
   };
 
+  const forgetBlock = (page) => {
+    blocksData.update((data) => {
+      const blockToDeleteIndex = data.findIndex(
+        (block) => block.id === page.blockEdited
+      );
+      data.splice(blockToDeleteIndex, 1);
+      return data;
+    });
+
+    page.blockEdited = null;
+  };
+
   const addBlockToPage = (page) => {
     pagesData.update((data) => {
       data.map((el) => {
@@ -78,8 +91,10 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <form class="generator__form">
-
-  <CustomCSS />
+  <div class="generator__form_general">
+    <SettingsForm />
+    <CustomCSS />
+  </div>
 
   <div class="generator__pages">
     {#each $pagesData as page}
@@ -92,14 +107,20 @@
             >+ Nouveau bloc</Button
           >
         {:else}
-          <div class="generator__new-block-2">
+          <div class="generator__new-block">
             <Block
               block={$blocksData.find((block) => block.id === page.blockEdited)}
             />
             {#if !page.blocks.includes(page.blockEdited)}
-              <Button on:click={() => addBlockToPage(page)}>
-                Ajouter le bloc à la page
-              </Button>
+              <div class="generator__buttons-group">
+                <Button
+                  disabled={$error.duplicate !== ""}
+                  on:click={() => addBlockToPage(page)}
+                >
+                  Ajouter le bloc à la page
+                </Button>
+                <Button on:click={() => forgetBlock(page)}>Annuler</Button>
+              </div>
             {:else}
               <Button on:click={() => (page.blockEdited = null)}>Valider</Button
               >
@@ -118,6 +139,12 @@
     padding-bottom: 64px;
   }
 
+  .generator__form_general {
+    border: 1px dashed var(--gen-c-neutral);
+    padding: var(--gen-gutter);
+    margin-bottom: 32px;
+  }
+
   .generator__blocks {
     display: grid;
     grid-gap: 20px;
@@ -129,22 +156,6 @@
 
     @media screen and (min-width: 1000px) {
       grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
-
-  .generator__new-block {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-
-  @media (hover: hover) {
-    .generator__new-block:hover {
-      p {
-        color: var(--gen-c-neutral);
-      }
     }
   }
 

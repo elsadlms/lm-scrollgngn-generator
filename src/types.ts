@@ -1,16 +1,16 @@
 import type { transitionOptions } from "./options"
 
 type TransitionName = typeof transitionOptions[number]
-type TransitionDuration = string|number
-export type TransitionData = [TransitionName]|[TransitionName, TransitionDuration]
+type TransitionDuration = string | number
+export type TransitionData = [TransitionName] | [TransitionName, TransitionDuration]
 
-type BlockDataLayout = 'default'|'left-half'|'right-half'
+type BlockDataLayout = 'default' | 'left-half' | 'right-half'
 
 export interface BlockData {
   id?: string
   name?: string
-  depth?: 'scroll'|'front'|'back'
-  type?: 'html'|'module'
+  depth?: 'scroll' | 'front' | 'back'
+  type?: 'html' | 'module'
   layout?: BlockDataLayout
   mobileLayout?: BlockDataLayout
   content?: string
@@ -26,4 +26,13 @@ export interface PageData {
   backgroundColor?: string;
   blocks?: any[]
   blockEdited?: string
+}
+
+export interface SettingsData {
+  bgColorTransitionDuration?: number;
+  thresholdOffset?: number;
+}
+
+export interface Errors {
+  duplicate?: string;
 }

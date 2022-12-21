@@ -192,6 +192,8 @@
     background-color: var(--gen-c-white);
     border: 1px dashed var(--gen-c-neutral);
     font-family: monospace;
+    width: 100%;
+    max-width: 100%;
   }
 
   .generator__page_blocks {
@@ -205,5 +207,9 @@
     background-color: var(--gen-c-lighter);
     padding: var(--gen-gutter);
     border-radius: var(--gen-border-radius);
+
+    p:first-child {
+      display: block;
+    }
   }
 </style>

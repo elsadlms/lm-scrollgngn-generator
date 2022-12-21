@@ -4,7 +4,6 @@
   $: customCss = $customCssData;
 
   const updateCss = () => {
-    console.log(customCss.replaceAll("<br>", "\n"));
     customCssData.update(() => customCss);
   };
 </script>
@@ -20,11 +19,15 @@
 
 <style lang="scss">
   .generator__custom-css {
+    margin-top: var(--gen-gutter);
+    border-top: 1px dashed var(--gen-c-light);
+
     &_content {
       background-color: var(--gen-c-lightest);
       width: 100%;
+      max-width: 100%;
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-top: var(--gen-gutter);
     }
   }
 </style>

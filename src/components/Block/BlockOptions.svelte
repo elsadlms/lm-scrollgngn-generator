@@ -58,6 +58,18 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="generator__block_options">
+  {#if block.type === "module"}
+    <div class="generator__form_group generator__flex generator__flex--small">
+      <input
+        name={`trackscroll-${block.id}`}
+        type="checkbox"
+        bind:checked={block.trackScroll}
+        on:change={updateBlock}
+      />
+      <label for={`trackscroll-${block.id}`}>Track scroll</label>
+    </div>
+  {/if}
+
   <div class="generator__flex generator__form_group">
     <p class="generator__form_label">Depth</p>
     {#each depthOptions.filter( (el) => (block.type === "module" ? el != "scroll" : el) ) as option}
@@ -116,18 +128,6 @@
           {option}
         </label>
       {/each}
-    </div>
-  {/if}
-
-  {#if block.type === "module"}
-    <div class="generator__form_group generator__flex generator__flex--small">
-      <input
-        name={`trackscroll-${block.id}`}
-        type="checkbox"
-        bind:checked={block.trackScroll}
-        on:change={updateBlock}
-      />
-      <label for={`trackscroll-${block.id}`}>Track scroll</label>
     </div>
   {/if}
 

@@ -1,14 +1,12 @@
 <script lang="ts">
   import type { BlockData } from "../../types";
-  import { blocksData } from "../../stores";
+  import { blocksData, error } from "../../stores";
   import { typeOptions } from "../../options";
 
   import Info from "../Styled/Info.svelte";
   import BlockOptions from "./BlockOptions.svelte";
 
   export let block: BlockData;
-
-  let error = "";
 
   let optionsOpen = true;
 
@@ -18,9 +16,13 @@
     );
 
     if (sameNameArray.length > 1) {
-      error = "Un bloc du même nom existe déjà !";
+      error.update((stored) => {
+        return { ...stored, duplicate: "Un bloc du même nom existe déjà !" };
+      });
     } else {
-      error = "";
+      error.update((stored) => {
+        return { ...stored, duplicate: "" };
+      });
       updateBlock();
     }
   };
@@ -53,8 +55,8 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="generator__block">
-  {#if error}
-    <Info marginBottom={20} error>{error}</Info>
+  {#if $error.duplicate}
+    <Info marginBottom={20} error>{$error.duplicate}</Info>
   {/if}
 
   <h3>
@@ -91,7 +93,9 @@
   </div>
 
   <div class="generator__form_group">
-    <p class="generator__form_label">Contenu</p>
+    <p class="generator__form_label">
+      {block.type === "module" ? "URL" : "Contenu"}
+    </p>
     <p
       class={inputContentClass}
       on:keyup={updateBlock}
@@ -129,7 +133,6 @@
 
       span {
         background-color: var(--gen-c-lightest);
-        border-bottom: 2px solid var(--gen-c-darker);
         padding: 0.4em 0.6em 0.2em;
         font-family: monospace;
       }
@@ -143,6 +146,8 @@
     background-color: var(--gen-c-lightest);
     border: 1px dashed var(--gen-c-neutral);
     font-family: monospace;
+    width: 100%;
+    max-width: 100%;
 
     &--html {
       min-height: 100px;

@@ -13,8 +13,6 @@
 
     if (sameNameArray.length > 1) {
       error = "Un bloc du même nom existe déjà !";
-      console.log(error)
-      console.log(nameClass)
     } else {
       error = "";
       updateBlock();
