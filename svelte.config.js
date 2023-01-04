@@ -1,7 +1,8 @@
-import sveltePreprocess from 'svelte-preprocess'
+import preprocess from "svelte-preprocess";
+import preprocessReact from "svelte-preprocess-react/preprocessReact";
 
 export default {
-  // Consult https://github.com/sveltejs/svelte-preprocess
-  // for more information about preprocessors
-  preprocess: sveltePreprocess()
-}
+  preprocess: preprocessReact({
+    preprocess: preprocess({ sourceMap: true }),
+  }),
+};

@@ -63,6 +63,13 @@
 
   $: output = JSON.stringify(data, null, 4);
 
+  $: localStorage.setItem("data", output);
+
+  const openPreview = () => {
+    const previewUrl = window.location.href + '?preview'
+    window.open(previewUrl, "_blank");
+  };
+
   const downloadOutput = () => {
     const file = new Blob([output], { type: "application/json" });
     saveAs(file, "scrllgngn.json");
@@ -87,6 +94,8 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="generator__snippet_wrapper">
   <div class="generator__buttons-group">
+    <Button on:click={openPreview}>Prévisualiser</Button>
+
     <Button on:click={downloadOutput}>Exporter au format json</Button>
 
     <div class="generator__snippet_copy">

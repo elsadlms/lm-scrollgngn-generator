@@ -10,21 +10,32 @@
       return !stored;
     });
   };
+
+  const isPreviewMode = window.location.search === "?preview";
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<main class="generator">
-  <header><h1>Scrollgngn</h1></header>
+<div>
+  {#if isPreviewMode}
+    <h1>Preview!</h1>
+    <p>{localStorage.getItem("data")}</p>
+  {:else}
+    <main class="generator">
+      <h1>Scrollgngn</h1>
 
-  <p class="generator__library-toggle" on:click={toggleLibrary}>Toggle library</p>
-  
-  {#if $libraryIsOpen}
-    <Library />
+      <p class="generator__library-toggle" on:click={toggleLibrary}>
+        Toggle library
+      </p>
+
+      {#if $libraryIsOpen}
+        <Library />
+      {/if}
+
+      <Form />
+      <Snippet />
+    </main>
   {/if}
-
-  <Form />
-  <Snippet />
-</main>
+</div>
 
 <style lang="scss">
   h1 {

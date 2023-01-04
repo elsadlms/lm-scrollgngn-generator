@@ -22,8 +22,7 @@
   },
   "dependencies": {
     "file-saver": "^2.0.5",
-    "highlight.js": "^11.7.0",
     "node-sass": "^8.0.0",
-    "svelte-highlight": "^6.2.1"
+    "svelte-preprocess-react": "^0.14.0"
   }
 }
