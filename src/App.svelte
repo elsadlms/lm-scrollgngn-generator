@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { libraryIsOpen } from "./stores";
+  import { libraryIsOpen, uploadId } from "./stores";
 
   import Form from "./components/Form.svelte";
   import Library from "./components/Library.svelte";
   import Snippet from "./components/Snippet.svelte";
+  import FileUpload from "./components/FileUpload.svelte";
 
   const toggleLibrary = () => {
     libraryIsOpen.update((stored) => {
@@ -23,6 +24,8 @@
     <main class="generator">
       <h1>Scrollgngn</h1>
 
+      <FileUpload />
+
       <p class="generator__library-toggle" on:click={toggleLibrary}>
         Toggle library
       </p>
@@ -31,7 +34,11 @@
         <Library />
       {/if}
 
-      <Form />
+      <!-- on rerender si on upload un fichier -->
+      {#key $uploadId}
+        <Form />
+      {/key}
+
       <Snippet />
     </main>
   {/if}
@@ -43,6 +50,7 @@
   }
 
   .generator__library-toggle {
+    padding-top: var(--gen-gutter);
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 0.2em;

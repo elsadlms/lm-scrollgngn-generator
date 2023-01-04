@@ -149,6 +149,9 @@ b {
   margin-right: 0.4em;
 }
 
+.generator input[type="file"] {
+  display: none;
+}
 
 .generator__form_label {
   font-weight: 500;

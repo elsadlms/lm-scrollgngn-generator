@@ -24,7 +24,8 @@ export const errors: Writable<ErrorData[]> = writable(
 )
 
 export const settingsData: Writable<SettingsData> = writable(defaultSettings)
-
 export const pagesData: Writable<PageData[]> = writable([])
 export const blocksData: Writable<BlockData[]> = writable(blocksLibrary as BlockData[])
 export const customCssData: Writable<string> = writable('// custom css')
+
+export const uploadId: Writable<string> = writable('')
