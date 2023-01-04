@@ -9,7 +9,6 @@
     settingsData.update(() => {
       return { bgColorTransitionDuration, thresholdOffset };
     });
-    console.log($settingsData);
   };
 </script>
 

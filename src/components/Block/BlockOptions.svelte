@@ -22,6 +22,8 @@
     } else {
       block.mobileTransitions = [];
     }
+
+    updateBlock();
   };
 
   const toggleMobileLayout = () => {
@@ -32,6 +34,8 @@
     } else {
       block.mobileLayout = "default";
     }
+
+    updateBlock();
   };
 
   const addTransition = (properties: { mobile?: boolean }) => {

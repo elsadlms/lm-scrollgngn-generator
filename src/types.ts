@@ -4,15 +4,17 @@ type TransitionName = typeof transitionOptions[number]
 type TransitionDuration = string | number
 export type TransitionData = [TransitionName] | [TransitionName, TransitionDuration]
 
-type BlockDataLayout = 'default' | 'left-half' | 'right-half'
+type depthData = 'scroll' | 'front' | 'back'
+type typeData = 'html' | 'module'
+type layoutData = 'default' | 'left-half' | 'right-half'
 
 export interface BlockData {
   id?: string
   name?: string
-  depth?: 'scroll' | 'front' | 'back'
-  type?: 'html' | 'module'
-  layout?: BlockDataLayout
-  mobileLayout?: BlockDataLayout
+  depth?: depthData
+  type?: typeData
+  layout?: layoutData
+  mobileLayout?: layoutData
   content?: string
   transitions?: TransitionData[]
   mobileTransitions?: TransitionData[]
@@ -21,18 +23,29 @@ export interface BlockData {
 }
 
 export interface PageData {
-  content?: string;
-  index?: number;
-  backgroundColor?: string;
+  content?: string
+  contentType?: typeData
+  contentLayout?: layoutData
+  contentMobileLayout?: layoutData
+  index?: number
+  bgColor?: string
   blocks?: any[]
   blockEdited?: string
 }
 
 export interface SettingsData {
-  bgColorTransitionDuration?: number;
-  thresholdOffset?: number;
+  bgColorTransitionDuration?: number
+  thresholdOffset?: number
 }
 
-export interface Errors {
-  duplicate?: string;
+export interface ScrollgngnData {
+  pages: PageData[],
+  bgColorTransitionDuration?: number
+  thresholdOffset?: number
+}
+
+export interface ErrorData {
+  name?: string
+  text?: string
+  active?: boolean
 }

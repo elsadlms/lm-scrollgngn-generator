@@ -2,6 +2,8 @@
   import type { BlockData } from "../../types";
   import { blocksData } from "../../stores";
 
+  import Label from "./../Styled/Label.svelte";
+
   export let block: BlockData;
 
   let error = "";
@@ -24,11 +26,12 @@
   };
 
   $: nameClass = `generator__page_block-name
-  ${error ? 'generator__page_block-name--error' : ''}`
+  ${error ? "generator__page_block-name--error" : ""}`;
 </script>
 
 <div class="generator__page_block-infos">
-  <p class="generator__page_block-label"><span>{block.type}</span></p>
+  <Label>{block.type}</Label>
+
   <p class={nameClass}>
     <span
       on:keyup={updateBlockName}
@@ -49,21 +52,6 @@
         padding-left: 0.5em;
         padding-top: 0.5em;
       }
-    }
-  }
-
-  .generator__page_block-label {
-    background-color: #c7d2fe;
-    padding: 0.4em 1em 0.1em;
-    border-radius: 1em;
-    line-height: 1em;
-    display: inline;
-    font-weight: 500;
-    font-size: 0.8em;
-    line-height: 12px;
-
-    span {
-      opacity: 0.8;
     }
   }
 

@@ -1,7 +1,12 @@
 <script lang="ts">
   import { saveAs } from "file-saver";
 
-  import { pagesData, blocksData, customCssData } from "../stores.js";
+  import {
+    pagesData,
+    blocksData,
+    customCssData,
+    settingsData
+  } from "../stores.js";
 
   import Info from "./Styled/Info.svelte";
   import Button from "./Styled/Button.svelte";
@@ -13,16 +18,32 @@
     cleanCss = cleanCss.replaceAll("<br>", " ");
     cleanCss = cleanCss.replaceAll("&nbsp;", " ");
 
-    cleanCss = `<${""}style>${cleanCss}</${""}style>`;
-
-    // besoin de casser la balise style pour une obcure erreur svelte
+    // besoin de casser la balise style pour une obscure erreur svelte
     // https://github.com/sveltejs/svelte/issues/5292
 
-    return { content: cleanCss };
+    cleanCss = `<${""}style>${cleanCss}</${""}style>`;
+
+    return { blocks: [{ content: cleanCss }] };
   };
 
-  $: data = [...$pagesData].map((page) => {
-    const { index, blockEdited, ...pageData } = { ...page };
+  $: pagesArray = [...$pagesData].map((page) => {
+    const {
+      index,
+      blockEdited,
+      content,
+      contentType,
+      contentLayout,
+      contentMobileLayout,
+      ...pageData
+    } = { ...page };
+
+    const contentBlock = {
+      depth: "scroll",
+      type: contentType,
+      layout: contentLayout,
+      mobileLayout: contentMobileLayout ?? contentLayout,
+      content: content
+    };
 
     pageData.blocks = page.blocks.map((el) => {
       const { name, ...block } = $blocksData.find((block) => block.id === el);
@@ -30,10 +51,17 @@
       return block;
     });
 
+    pageData.blocks = [contentBlock, ...pageData.blocks];
+
     return pageData;
   });
 
-  $: output = JSON.stringify([cleanCustomCss(), ...data], null, 4);
+  $: data = {
+    ...$settingsData,
+    pages: [cleanCustomCss(), ...pagesArray]
+  };
+
+  $: output = JSON.stringify(data, null, 4);
 
   const downloadOutput = () => {
     const file = new Blob([output], { type: "application/json" });

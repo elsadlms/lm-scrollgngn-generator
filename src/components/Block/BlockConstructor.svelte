@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BlockData } from "../../types";
-  import { blocksData, error } from "../../stores";
+  import type { BlockData, ErrorData } from "../../types";
+  import { blocksData, pagesData, errors } from "../../stores";
   import { typeOptions } from "../../options";
 
   import Info from "../Styled/Info.svelte";
@@ -11,20 +11,47 @@
   let optionsOpen = true;
 
   const updateBlockName = () => {
+    // on vérifie si le nom n'est pas vide
+    if (block.name === "") {
+      addErrorToStore("emptyBlockName");
+    } else {
+      deleteErrorFromStore("emptyBlockName");
+      updateBlock();
+    }
+
+    // on vérifie s'il n'y a pas de doublon
     const sameNameArray: BlockData[] = $blocksData.filter(
       (el) => el.name === block.name
     );
 
     if (sameNameArray.length > 1) {
-      error.update((stored) => {
-        return { ...stored, duplicate: "Un bloc du même nom existe déjà !" };
-      });
+      addErrorToStore("duplicateBlockName");
     } else {
-      error.update((stored) => {
-        return { ...stored, duplicate: "" };
-      });
+      deleteErrorFromStore("duplicateBlockName");
       updateBlock();
     }
+  };
+
+  const addErrorToStore = (errorName: string) => {
+    errors.update((stored) => {
+      stored.map((error) => {
+        if (error.name === errorName) {
+          error.active = true;
+        }
+      });
+      return stored;
+    });
+  };
+
+  const deleteErrorFromStore = (errorName: string) => {
+    errors.update((stored) => {
+      stored.map((error) => {
+        if (error.name === errorName) {
+          error.active = false;
+        }
+      });
+      return stored;
+    });
   };
 
   const updateBlockType = () => {
@@ -51,12 +78,52 @@
   $: optionsToggleClass = `generator__toggle ${
     optionsOpen ? "generator__toggle--open" : ""
   }`;
+
+  $: warningOnEdit = () => {
+    const pages = [];
+
+    // on vérifie si le bloc est présent dans d'autres pages
+    $pagesData.map((page) => {
+      const found = page.blocks.find((el) => el === block.id);
+      if (found && !page.blockEdited) pages.push(page.index + 1);
+    });
+
+    // si pas présent dans d'autres pages, pas d'avertissement
+    if (pages.length === 0) return null;
+
+    // si présent dans d'autres pages, avertissement avec les pages concernées
+    let pagesToText = "";
+
+    if (pages.length === 1) pagesToText = `la page ${pages[0]}.`;
+
+    if (pages.length > 1) {
+      pagesToText = "les pages";
+      for (const [i, page] of pages.entries()) {
+        if (i === pages.length - 1) pagesToText += ` et ${page}.`;
+        else if (i === pages.length - 2) pagesToText += ` ${page}`;
+        else pagesToText += ` ${page},`;
+      }
+    }
+
+    const text = `Attention, vous modifiez un bloc également présent dans ${pagesToText}`;
+    return text;
+  };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="generator__block">
-  {#if $error.duplicate}
-    <Info marginBottom={20} error>{$error.duplicate}</Info>
+  {#each $errors as error}
+    {#if error.active}
+      <Info marginBottom={20} error>{error.text}</Info>
+    {/if}
+  {/each}
+
+  <!-- {#if $error.duplicateBlockName}
+    <Info marginBottom={20} error>{$error.duplicateBlockName}</Info>
+  {/if} -->
+
+  {#if warningOnEdit()}
+    <Info marginBottom={20} warning>{warningOnEdit()}</Info>
   {/if}
 
   <h3>
@@ -117,16 +184,8 @@
     padding: 20px;
     border-radius: var(--gen-border-radius);
     transition: background-color 200ms;
-    margin: 0 20px 20px 20px;
+    margin-bottom: 20px;
     background-color: var(--gen-c-lighter);
-
-    &:first-of-type {
-      margin-left: 0;
-    }
-
-    &:last-of-type {
-      margin-right: 0;
-    }
 
     h3 {
       margin-bottom: 20px;

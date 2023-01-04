@@ -2,11 +2,11 @@
   import SettingsForm from "./SettingsForm.svelte";
   import CustomCSS from "./CustomCSS.svelte";
   import Page from "./Page.svelte";
-  import Block from "./Block/BlockConstructor.svelte";
+  import BlockConstructor from "./Block/BlockConstructor.svelte";
   import Button from "./Styled/Button.svelte";
 
   import type { BlockData } from "../types";
-  import { pagesData, blocksData, error } from "../stores";
+  import { pagesData, blocksData, errors } from "../stores";
   import { defaultBlock, defaultPage } from "../models";
   import { getRandomId } from "../utils";
 
@@ -22,11 +22,11 @@
     const blockToDuplicate = $blocksData.find((el) => el.id === blockID);
 
     let i = 2;
-    let newID = `${blockToDuplicate.name} (${i})`;
+    let newID = `${blockToDuplicate.name}-${i}`;
 
     while ($blocksData.find((el) => el.name === newID)) {
       i++;
-      newID = `${blockToDuplicate.name} (${i})`;
+      newID = `${blockToDuplicate.name}-${i}`;
     }
 
     const duplicate = {
@@ -37,7 +37,7 @@
     return duplicate;
   };
 
-  const editBlock = ({ blockID, page }) => {
+  const editNewBlock = ({ blockID, page }) => {
     const randomID = getRandomId();
     let newBlock: BlockData;
 
@@ -87,6 +87,8 @@
 
     page.blockEdited = null;
   };
+
+  $: hasError = $errors.filter((error) => error.active).length > 0
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -99,34 +101,39 @@
   <div class="generator__pages">
     {#each $pagesData as page}
       <Page
-        on:duplicate={(e) => editBlock({ blockID: e.detail.block, page })}
+        on:duplicate={(e) => editNewBlock({ blockID: e.detail.block, page })}
         {page}
       >
-        {#if !page.blockEdited}
-          <Button on:click={() => editBlock({ blockID: null, page })}
-            >+ Nouveau bloc</Button
-          >
-        {:else}
-          <div class="generator__new-block">
-            <Block
-              block={$blocksData.find((block) => block.id === page.blockEdited)}
-            />
-            {#if !page.blocks.includes(page.blockEdited)}
-              <div class="generator__buttons-group">
-                <Button
-                  disabled={$error.duplicate !== ""}
-                  on:click={() => addBlockToPage(page)}
+        <div slot="new-block">
+          {#if !page.blockEdited}
+            <Button on:click={() => editNewBlock({ blockID: null, page })}
+              >+ Nouveau bloc</Button
+            >
+          {:else}
+            <div class="generator__new-block">
+              <BlockConstructor
+                block={$blocksData.find(
+                  (block) => block.id === page.blockEdited
+                )}
+              />
+              {#if !page.blocks.includes(page.blockEdited)}
+                <div class="generator__buttons-group">
+                  <Button
+                    disabled={hasError}
+                    on:click={() => addBlockToPage(page)}
+                  >
+                    Ajouter le bloc à la page
+                  </Button>
+                  <Button on:click={() => forgetBlock(page)}>Annuler</Button>
+                </div>
+              {:else}
+                <Button on:click={() => (page.blockEdited = null)}
+                  >Valider</Button
                 >
-                  Ajouter le bloc à la page
-                </Button>
-                <Button on:click={() => forgetBlock(page)}>Annuler</Button>
-              </div>
-            {:else}
-              <Button on:click={() => (page.blockEdited = null)}>Valider</Button
-              >
-            {/if}
-          </div>
-        {/if}
+              {/if}
+            </div>
+          {/if}
+        </div>
       </Page>
     {/each}
   </div>
@@ -136,6 +143,7 @@
 
 <style lang="scss">
   .generator__form {
+    margin-top: 32px;
     padding-bottom: 64px;
   }
 

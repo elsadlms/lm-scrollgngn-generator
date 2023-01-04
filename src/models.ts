@@ -1,7 +1,7 @@
 import type { BlockData, PageData, SettingsData } from "./types"
 
 export const defaultBlock: BlockData = {
-  depth: 'scroll',
+  depth: 'back',
   type: 'html',
   layout: 'default',
   content: '<div>un bloc</div>',
@@ -9,8 +9,10 @@ export const defaultBlock: BlockData = {
 }
 
 export const defaultPage: PageData = {
-  backgroundColor: '#ffffff',
+  bgColor: '#ffffff',
   content: '<div>Contenu de la page</div>',
+  contentType: 'html',
+  contentLayout: 'default',
   blocks: []
 }
 

@@ -25,6 +25,7 @@ b {
 .generator {
   --gen-gutter: 20px;
   --gen-border-radius: 6px;
+
   --gen-c-white: #f8fafc;
   --gen-c-lightest: #f1f5f9;
   --gen-c-lighter: #e2e8f0;
@@ -33,7 +34,15 @@ b {
   --gen-c-dark: #64748b;
   --gen-c-darker: #334155;
   --gen-c-darkest: #1e293b;
+
   --gen-c-error: #e11d48;
+  --gen-c-error-light: #ffe4ea;
+  --gen-c-warning: #e1701d;
+  --gen-c-warning-light: #ffedd5;
+  --gen-c-success: #047857;
+  --gen-c-success-light: #d1fae5;
+  --gen-c-accent: #0e7490;
+  --gen-c-accent-light: #f0f9ff;
 
   font-family: Marr Sans;
   font-size: 14px;
@@ -145,6 +154,12 @@ b {
   font-weight: 500;
 
   &--padding {
+    padding-bottom: 12px;
+  }
+
+  &--header {
+    font-weight: 600;
+    padding-top: 24px;
     padding-bottom: 12px;
   }
 }
