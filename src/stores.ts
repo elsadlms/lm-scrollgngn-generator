@@ -6,8 +6,6 @@ import type { PageData, BlockData, SettingsData, ErrorData } from "./types"
 import { defaultSettings } from "./models"
 import blocksLibrary from "./library"
 
-export const libraryIsOpen: Writable<Boolean> = writable(true)
-
 export const errors: Writable<ErrorData[]> = writable(
   [
     {
