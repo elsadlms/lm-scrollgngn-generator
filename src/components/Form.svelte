@@ -153,20 +153,6 @@
     margin-bottom: 32px;
   }
 
-  .generator__blocks {
-    display: grid;
-    grid-gap: 20px;
-    grid-template-columns: 1fr;
-
-    @media screen and (min-width: 600px) {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    @media screen and (min-width: 1000px) {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
-
   .generator__pages {
     margin-bottom: 1em;
   }

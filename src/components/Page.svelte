@@ -272,10 +272,6 @@
     select {
       align-self: stretch;
     }
-
-    .generator__text--disabled {
-      padding-top: 12px;
-    }
   }
 
   .generator__page_content_input {
