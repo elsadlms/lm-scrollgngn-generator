@@ -18,6 +18,11 @@ export const errors: Writable<ErrorData[]> = writable(
       text: "Le nom du bloc ne peut pas être vide !",
       active: false
     },
+    {
+      name: "emptyBlockContent",
+      text: "Le contenu du bloc ne peut pas être vide !",
+      active: false
+    },
   ]
 )
 

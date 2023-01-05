@@ -10,28 +10,6 @@
 
   let optionsOpen = true;
 
-  const updateBlockName = () => {
-    // on vérifie si le nom n'est pas vide
-    if (block.name === "") {
-      addErrorToStore("emptyBlockName");
-    } else {
-      deleteErrorFromStore("emptyBlockName");
-      updateBlock();
-    }
-
-    // on vérifie s'il n'y a pas de doublon
-    const sameNameArray: BlockData[] = $blocksData.filter(
-      (el) => el.name === block.name
-    );
-
-    if (sameNameArray.length > 1) {
-      addErrorToStore("duplicateBlockName");
-    } else {
-      deleteErrorFromStore("duplicateBlockName");
-      updateBlock();
-    }
-  };
-
   const addErrorToStore = (errorName: string) => {
     errors.update((stored) => {
       stored.map((error) => {
@@ -54,14 +32,40 @@
     });
   };
 
-  const updateBlockType = () => {
+  const updateBlock = () => {
+    // on corrige si option pas possible
     if (block.type === "module" && block.depth === "scroll") {
       block.depth = "back";
     }
-    updateBlock();
-  };
 
-  const updateBlock = () => {
+    // on vérifie s'il n'y a pas de doublon
+    const sameNameArray: BlockData[] = $blocksData.filter(
+      (el) => el.name === block.name
+    );
+
+    if (sameNameArray.length > 1) {
+      addErrorToStore("duplicateBlockName");
+      return;
+    } else {
+      deleteErrorFromStore("duplicateBlockName");
+    }
+
+    // on vérifie si le nom n'est pas vide
+    if (block.name === "") {
+      addErrorToStore("emptyBlockName");
+      return;
+    } else {
+      deleteErrorFromStore("emptyBlockName");
+    }
+
+    // on vérifie si le contenu n'est pas vide
+    if (block.content === "") {
+      addErrorToStore("emptyBlockContent");
+      return;
+    } else {
+      deleteErrorFromStore("emptyBlockContent");
+    }
+
     blocksData.update((data) => data);
   };
 
@@ -105,7 +109,7 @@
       }
     }
 
-    const text = `Attention, vous modifiez un bloc également présent dans ${pagesToText}`;
+    const text = `Attention, ces modifications seront également appliquées dans ${pagesToText}`;
     return text;
   };
 </script>
@@ -128,7 +132,7 @@
 
   <h3>
     <span
-      on:keyup={updateBlockName}
+      on:keyup={updateBlock}
       bind:textContent={block.name}
       contenteditable="true"
     />
@@ -151,7 +155,7 @@
           type="radio"
           name={`type-${block.id}`}
           bind:group={block.type}
-          on:change={updateBlockType}
+          on:change={updateBlock}
           value={option}
         />
         {option}
