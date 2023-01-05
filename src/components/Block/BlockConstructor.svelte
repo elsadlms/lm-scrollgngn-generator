@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { BlockData, ErrorData } from "../../types";
+  import type { BlockData } from "../../types";
   import { blocksData, pagesData, errors } from "../../stores";
   import { typeOptions } from "../../options";
+  import { addErrorToStore, deleteAllErrorsFromStore } from "../../utils";
 
   import Info from "../Styled/Info.svelte";
   import BlockOptions from "./BlockOptions.svelte";
@@ -10,33 +11,13 @@
 
   let optionsOpen = true;
 
-  const addErrorToStore = (errorName: string) => {
-    errors.update((stored) => {
-      stored.map((error) => {
-        if (error.name === errorName) {
-          error.active = true;
-        }
-      });
-      return stored;
-    });
-  };
-
-  const deleteErrorFromStore = (errorName: string) => {
-    errors.update((stored) => {
-      stored.map((error) => {
-        if (error.name === errorName) {
-          error.active = false;
-        }
-      });
-      return stored;
-    });
-  };
-
   const updateBlock = () => {
     // on corrige si option pas possible
     if (block.type === "module" && block.depth === "scroll") {
       block.depth = "back";
     }
+
+    deleteAllErrorsFromStore();
 
     // on vérifie s'il n'y a pas de doublon
     const sameNameArray: BlockData[] = $blocksData.filter(
@@ -46,24 +27,18 @@
     if (sameNameArray.length > 1) {
       addErrorToStore("duplicateBlockName");
       return;
-    } else {
-      deleteErrorFromStore("duplicateBlockName");
     }
 
     // on vérifie si le nom n'est pas vide
     if (block.name === "") {
       addErrorToStore("emptyBlockName");
       return;
-    } else {
-      deleteErrorFromStore("emptyBlockName");
     }
 
     // on vérifie si le contenu n'est pas vide
     if (block.content === "") {
       addErrorToStore("emptyBlockContent");
       return;
-    } else {
-      deleteErrorFromStore("emptyBlockContent");
     }
 
     blocksData.update((data) => data);
