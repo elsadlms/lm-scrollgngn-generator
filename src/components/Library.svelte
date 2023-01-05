@@ -1,13 +1,24 @@
 <script lang="ts">
   import { blocksData, pagesData } from "../stores";
+  import type { BlockData } from "../types";
 
   import LibraryBlock from "./Block/LibraryBlock.svelte";
 
-  const openBlock = (block) => {
+  const openBlock = (block: BlockData) => {
     openBlockId = block.id;
   };
 
-  const deleteBlockFromLibrary = (block) => {
+  let deleteWarningOnBlock = "";
+
+  const openWarningBeforeDelete = (block: BlockData) => {
+    deleteWarningOnBlock = block.id;
+  };
+
+  const closeWarningBeforeDelete = () => {
+    deleteWarningOnBlock = "";
+  };
+
+  const deleteBlockFromLibrary = (block: BlockData) => {
     // on supprime le bloc dans les pages dans lesquelles il apparaissait
     // (todo / on pourrait ajouter un warning quand c'est le cas)
     pagesData.update((data) => {
@@ -52,10 +63,17 @@
             class="generator__library_element_delete"
             on:mouseenter={() => (bgColorOnHover = "var(--gen-c-error-light)")}
             on:mouseout={() => (bgColorOnHover = "var(--gen-c-lighter)")}
-            on:click|stopPropagation={() => deleteBlockFromLibrary(block)}
+            on:click|stopPropagation={() => openWarningBeforeDelete(block)}
           >
             x
           </p>
+          {#if deleteWarningOnBlock === block.id}
+            <p on:click|stopPropagation>sûr???</p>
+            <p on:click|stopPropagation={() => deleteBlockFromLibrary(block)}>
+              oui
+            </p>
+            <p on:click|stopPropagation={closeWarningBeforeDelete}>no</p>
+          {/if}
         </svelte:fragment>
         <svelte:fragment slot="close-block">
           {#if block.id === openBlockId}
