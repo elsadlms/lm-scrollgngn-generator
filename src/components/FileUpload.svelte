@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getRandomId } from "../utils";
+  import { getRandomId, readFile } from "../utils";
   import blocksLibrary from "./../library";
 
   import {
@@ -15,22 +15,10 @@
 
   let files: FileList;
 
-  $: if (files) {
-    let reader = new FileReader();
+  $: if (files) readFile(files[0], loadData)
 
-    reader.addEventListener("load", () => {
-      let result = JSON.parse(reader.result as string);
-      console.log("loaded!");
-      loadData(result);
-    });
-
-    if (files[0]) {
-      reader.readAsText(files[0]);
-    }
-  }
-
-  const loadData = (loaded) => {
-    console.log(loaded);
+  const loadData = (rawLoaded) => {
+    const loaded = JSON.parse(rawLoaded)
 
     // on remplace le contenu du store par les données qu'on vient de charger
 
@@ -41,9 +29,8 @@
     });
 
     // customCssData
-    const styleTagsRegex = /<style>([\s\S]*?)<\/style>/g;
     const loadedCustomCss = loaded.pages[0].blocks[0].content;
-    const cleanCustomCss = loadedCustomCss.replace(styleTagsRegex, "$1");
+    const cleanCustomCss = loadedCustomCss.replace('<style>', '').replace('<\/style>', '');
     customCssData.set(cleanCustomCss);
 
     // pagesData

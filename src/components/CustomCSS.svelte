@@ -1,5 +1,14 @@
 <script lang="ts">
+  import { readFile } from "../utils";
   import { customCssData } from "../stores";
+
+  let files: FileList;
+
+  $: if (files) readFile(files[0], loadCss)
+
+  const loadCss = (loaded) => {
+    customCssData.set(loaded);
+  }
 
   $: customCss = $customCssData;
 
@@ -15,6 +24,12 @@
     bind:innerHTML={customCss}
     contenteditable="true"
   />
+  <div class="generator__form_group">
+    <label for="loadedCss">
+      <p class="generator__form_button generator__form_button--uppercase">Importer une feuille de style</p>
+    </label>
+    <input bind:files id="loadedCss" name="loadedCss" type="file" />
+  </div>
 </div>
 
 <style lang="scss">
