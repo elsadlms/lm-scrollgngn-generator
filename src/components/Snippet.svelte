@@ -62,13 +62,22 @@
   };
 
   $: output = JSON.stringify(data, null, 4);
-
   $: localStorage.setItem("data", output);
+  $: output, sendDataToServer()
+
+  const sendDataToServer = () => {
+    console.log('send new data!')
+    console.log(output)
+    const http = new XMLHttpRequest();
+    const serverUrl = 'http://localhost:3000/preview'
+    http.open('POST', serverUrl)
+    http.setRequestHeader('Content-Type', 'application/json')
+    http.send(output)
+  };
 
   const openPreview = () => {
-    const previewUrl = window.location.href + '?preview'
-    window.open(previewUrl, "_blank");
-  };
+    console.log('preview!')
+  }
 
   const downloadOutput = () => {
     const file = new Blob([output], { type: "application/json" });
