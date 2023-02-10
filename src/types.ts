@@ -6,7 +6,7 @@ export type TransitionData = [TransitionName] | [TransitionName, TransitionDurat
 
 type depthData = 'scroll' | 'front' | 'back'
 type typeData = 'html' | 'module'
-type layoutData = 'default' | 'left-half' | 'right-half'
+type layoutData = 'left-half' | 'right-half' | 'full-screen'
 
 export interface BlockData {
   id?: string

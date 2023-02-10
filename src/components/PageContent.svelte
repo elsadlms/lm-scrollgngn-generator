@@ -14,7 +14,7 @@
     if (!mobileLayout) {
       delete page.contentMobileLayout;
     } else {
-      page.contentMobileLayout = "default";
+      page.contentMobileLayout = 'full-screen';
     }
 
     updateData();

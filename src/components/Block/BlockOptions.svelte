@@ -32,7 +32,7 @@
     if (!mobileLayout) {
       delete block.mobileLayout;
     } else {
-      block.mobileLayout = "default";
+      block.mobileLayout = "full-screen";
     }
 
     updateBlock();

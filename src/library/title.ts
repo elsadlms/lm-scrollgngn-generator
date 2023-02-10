@@ -1,8 +1,8 @@
 export const title = {
   name: 'simple-title',
-  depth: 'scroll',
+  depth: 'back',
   type: 'html',
-  layout: 'default',
+  layout: 'full-screen',
   content: `<div><h1>Un titre simple</h1></div>`,
   transitions: [],
   id: "nu83zxzpbwa"
