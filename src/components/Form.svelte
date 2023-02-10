@@ -88,14 +88,17 @@
     page.blockEdited = null;
   };
 
-  $: hasError = $errors.filter((error) => error.active).length > 0
+  $: hasError = $errors.filter((error) => error.active).length > 0;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <form class="generator__form">
   <div class="generator__form_general">
-    <SettingsForm />
-    <CustomCSS />
+    <p class="generator__form_label">Réglages généraux</p>
+    <div class="generator__form_group">
+      <SettingsForm />
+      <CustomCSS />
+    </div>
   </div>
 
   <div class="generator__pages">
@@ -127,9 +130,12 @@
                   <Button on:click={() => forgetBlock(page)}>Annuler</Button>
                 </div>
               {:else}
-                <Button on:click={() => (page.blockEdited = null)}
-                  >Valider</Button
+                <Button
+                  disabled={hasError}
+                  on:click={() => (page.blockEdited = null)}
                 >
+                  Valider
+                </Button>
               {/if}
             </div>
           {/if}
