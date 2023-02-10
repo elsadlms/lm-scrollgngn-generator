@@ -63,21 +63,26 @@
 
   $: output = JSON.stringify(data, null, 4);
   $: localStorage.setItem("data", output);
-  $: output, sendDataToServer()
+  $: output, sendDataToServer();
 
-  const sendDataToServer = () => {
-    console.log('send new data!')
-    console.log(output)
-    const http = new XMLHttpRequest();
-    const serverUrl = 'http://localhost:3000/preview'
-    http.open('POST', serverUrl)
-    http.setRequestHeader('Content-Type', 'application/json')
-    http.send(output)
+  const sendDataToServer = async () => {
+    console.log("send new data!");
+    console.log(output);
+
+    fetch("http://localhost:3000/preview", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: output
+    }).catch((error) => {
+      console.error("error!", error);
+    });
   };
 
   const openPreview = () => {
-    console.log('preview!')
-  }
+    console.log("preview!");
+  };
 
   const downloadOutput = () => {
     const file = new Blob([output], { type: "application/json" });
