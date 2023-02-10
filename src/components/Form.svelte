@@ -31,6 +31,8 @@
 
     const duplicate = {
       ...blockToDuplicate,
+      transitions: [...blockToDuplicate.transitions],
+      mobileTransitions: blockToDuplicate.mobileTransitions ? [...blockToDuplicate.mobileTransitions] : [],
       name: newID
     };
 
@@ -43,9 +45,10 @@
 
     if (!blockID) {
       newBlock = {
+        ...defaultBlock,
         id: randomID,
         name: randomID,
-        ...defaultBlock
+        transitions: [],
       };
     } else {
       newBlock = {
