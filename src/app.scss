@@ -22,6 +22,16 @@ b {
   font-weight: 600;
 }
 
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+#app > div {
+  display: flex;
+  justify-content: center;
+}
+
 .generator {
   --gen-gutter: 20px;
   --gen-border-radius: 6px;
@@ -48,7 +58,7 @@ b {
   font-size: 14px;
   color: var(--gen-c-darker);
   max-width: 1024px;
-  margin: 32px auto;
+  padding: 32px;
 }
 
 .generator__flex {

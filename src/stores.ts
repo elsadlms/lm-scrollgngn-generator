@@ -32,3 +32,5 @@ export const blocksData: Writable<BlockData[]> = writable(blocksLibrary as Block
 export const customCssData: Writable<string> = writable('// custom css')
 
 export const uploadId: Writable<string> = writable('')
+
+export const libraryIsOpen: Writable<Boolean> = writable(false)

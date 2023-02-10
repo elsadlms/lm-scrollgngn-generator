@@ -6,17 +6,19 @@
   import Snippet from "./components/Snippet.svelte";
   import FileUpload from "./components/FileUpload.svelte";
 
-  let libraryIsOpen = false;
+  import { libraryIsOpen } from "./stores";
 
   const toggleLibrary = () => {
-    libraryIsOpen = !libraryIsOpen;
+    libraryIsOpen.update((status) => !status)
   };
 
   const isPreviewMode = window.location.search === "?preview";
+
+  $: translatedClass = $libraryIsOpen ? 'wrapper--library-open' : ''
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div>
+<div class={translatedClass}>
   {#if isPreviewMode}
     <h1>Preview!</h1>
     <p>{localStorage.getItem("data")}</p>
@@ -27,10 +29,10 @@
       <FileUpload />
 
       <p class="generator__library-toggle" on:click={toggleLibrary}>
-        { libraryIsOpen ? 'Fermer' : 'Ouvrir' } la bibliothèque de blocs
+        { $libraryIsOpen ? 'Fermer' : 'Ouvrir' } la bibliothèque de blocs
       </p>
 
-      {#if libraryIsOpen}
+      {#if $libraryIsOpen}
         <Library />
       {/if}
 
@@ -44,8 +46,9 @@
   {/if}
 </div>
 
-<style lang="scss">
+<style global lang="scss">
   h1 {
+    margin-top: 32px;
     margin-bottom: 32px;
   }
 
@@ -54,5 +57,14 @@
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 0.2em;
+  }
+
+  .wrapper--library-open {
+    transform: translateX(500px);
+    transition: transform 500ms;
+
+    .generator__library {
+    transform: translateX(-500px);
+    }
   }
 </style>

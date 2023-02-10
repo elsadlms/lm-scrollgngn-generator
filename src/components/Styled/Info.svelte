@@ -29,16 +29,19 @@
 
     &--success {
       background-color: var(--gen-c-success-light);
+      border-bottom: 1px solid var(--gen-c-success);
       color: var(--gen-c-success);
     }
 
     &--error {
       background-color: var(--gen-c-error-light);
+      border-bottom: 1px solid var(--gen-c-error);
       color: var(--gen-c-error);
     }
 
     &--warning {
       background-color: var(--gen-c-warning-light);
+      border-bottom: 1px solid var(--gen-c-warning);
       color: var(--gen-c-warning);
     }
 

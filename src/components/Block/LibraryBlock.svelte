@@ -11,10 +11,13 @@
   <!-- btn supprimer -->
   <div class="generator__library-element_header">
     <slot name="delete-block" />
-    <slot name="close-block" />
 
-    <Label>{block.type}</Label>
-    <p class="generator__library-element_title">{block.name}</p>
+    <div class="generator__library-element_title">
+      <Label>{block.type}</Label>
+      <p>{block.name}</p>
+    </div>
+
+      <slot name="close-block" />
   </div>
 
   {#if blockIsOpen}
@@ -32,6 +35,12 @@
   }
 
   .generator__library-element_title {
+    display: flex;
+    column-gap: 0.6em;
+    align-items: baseline;
+  }
+
+  .generator__library-element_title p {
     font-weight: 500;
   }
 </style>
