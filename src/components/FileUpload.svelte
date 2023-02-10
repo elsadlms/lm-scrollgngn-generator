@@ -25,7 +25,7 @@
     // settingsData
     settingsData.set({
       bgColorTransitionDuration: loaded.bgColorTransitionDuration,
-      thresholdOffset: loaded.thresholdOffset
+      thresholdOffset: loaded.thresholdOffset.replace('%', '')
     });
 
     // customCssData

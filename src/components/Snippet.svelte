@@ -57,7 +57,8 @@
   });
 
   $: data = {
-    ...$settingsData,
+    thresholdOffset: $settingsData.thresholdOffset + '%',
+    bgColorTransitionDuration: $settingsData.bgColorTransitionDuration,
     pages: [cleanCustomCss(), ...pagesArray]
   };
 
@@ -66,8 +67,8 @@
   $: output, sendDataToServer();
 
   const sendDataToServer = async () => {
-    console.log("send new data!");
-    console.log(output);
+    // console.log("send new data!");
+    // console.log(output);
 
     fetch("http://localhost:3000/preview", {
       method: "POST",
