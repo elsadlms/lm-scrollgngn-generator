@@ -1,12 +1,11 @@
 <script lang="ts">
   import type { BlockData } from "../../types";
-  import { blocksData } from "../../stores";
+  import { blocksData, errors } from "../../stores";
+  import { addErrorToStore, deleteErrorFromStore } from "../../utils";
 
   import Label from "./../Styled/Label.svelte";
 
   export let block: BlockData;
-
-  let error = "";
 
   const updateBlockName = () => {
     const sameNameArray: BlockData[] = $blocksData.filter(
@@ -14,9 +13,9 @@
     );
 
     if (sameNameArray.length > 1) {
-      error = "Un bloc du même nom existe déjà !";
+      addErrorToStore("duplicateBlockName");
     } else {
-      error = "";
+      deleteErrorFromStore("duplicateBlockName");
       updateBlock();
     }
   };
@@ -25,8 +24,10 @@
     blocksData.update((data) => data);
   };
 
+  $: hasError = $errors.filter((error) => error.active).length > 0;
+
   $: nameClass = `generator__page_block-name
-  ${error ? "generator__page_block-name--error" : ""}`;
+  ${hasError ? "generator__page_block-name--error" : ""}`;
 </script>
 
 <div class="generator__page_block-infos">
